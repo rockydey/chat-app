@@ -1,0 +1,154 @@
+[
+  {
+    "id": 1,
+    "receiver_name": "Emma Watson",
+    "receiver_img": "https://shadcn-chat.vercel.app/User1.png",
+    "sender_img": "https://shadcn-chat.vercel.app/LoggedInUser.jpg",
+    "message": [
+      {
+        "mgId": 1,
+        "sender": "Hey, do you have any plans for the weekend?",
+        "receiver": "Not yet. I was thinking of going hiking. Want to join?"
+      },
+      {
+        "mgId": 2,
+        "sender": "That sounds fun! Where are you planning to go?",
+        "receiver": "I was thinking about the trails at Green Mountain. The view is amazing there."
+      },
+      {
+        "mgId": 3,
+        "sender": "Have you tried that new cafe downtown?",
+        "receiver": "Not yet. Is it good?"
+      },
+      {
+        "mgId": 4,
+        "sender": "Yeah, their coffee is excellent, and the pastries are to die for.",
+        "receiver": "Great! Let's go there for brunch tomorrow."
+      },
+      {
+        "mgId": 5,
+        "sender": "Did you finish the book I lent you?",
+        "receiver": "Yes, I loved it! The plot twist at the end was incredible."
+      },
+      {
+        "mgId": 6,
+        "sender": "What did you think of the movie last night?",
+        "receiver": "It was okay, but I felt like the ending was a bit rushed."
+      },
+      {
+        "mgId": 7,
+        "sender": "Are you coming to the party on Friday?",
+        "receiver": "I wouldn't miss it! What time does it start?"
+      },
+      {
+        "mgId": 8,
+        "sender": "Have you seen the latest episode of that series?",
+        "receiver": "Not yet. No spoilers, please!"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "receiver_name": "John Doe",
+    "receiver_img": "https://shadcn-chat.vercel.app/User4.png",
+    "sender_img": "https://shadcn-chat.vercel.app/LoggedInUser.jpg",
+    "message": [
+      {
+        "mgId": 1,
+        "sender": "How was your trip to Japan?",
+        "receiver": "It was amazing! The food, the culture, everything was wonderful."
+      },
+      {
+        "mgId": 2,
+        "sender": "I’ve always wanted to visit. Did you take lots of pictures?",
+        "receiver": "Yes, I took hundreds! I'll show you some later."
+      },
+      {
+        "mgId": 3,
+        "sender": "Are you free to catch up this week?",
+        "receiver": "Yes, I am. How about Thursday evening?"
+      },
+      {
+        "mgId": 4,
+        "sender": "Thursday works for me. Let’s meet at the usual spot.",
+        "receiver": "Sounds good. Looking forward to it!"
+      },
+      {
+        "mgId": 5,
+        "sender": "What did you think of the game last night?",
+        "receiver": "It was intense! The final score was so close."
+      },
+      {
+        "mgId": 6,
+        "sender": "I know, right? I was on the edge of my seat the whole time.",
+        "receiver": "Same here. Can't wait for the next match."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "receiver_name": "Lily Evans",
+    "receiver_img": "https://shadcn-chat.vercel.app/User3.png",
+    "sender_img": "https://shadcn-chat.vercel.app/LoggedInUser.jpg",
+    "message": [
+      {
+        "mgId": 1,
+        "sender": "Have you decided on the theme for the party?",
+        "receiver": "Yes, we're going with a tropical theme this year."
+      },
+      {
+        "mgId": 2,
+        "sender": "That sounds exciting! Do you need any help with the decorations?",
+        "receiver": "Actually, yes. Could you help me with the centerpieces?"
+      },
+      {
+        "mgId": 3,
+        "sender": "Of course! Just let me know what you need.",
+        "receiver": "Thanks! I'll send you a list later."
+      },
+      {
+        "mgId": 4,
+        "sender": "Have you seen the latest art exhibit at the gallery?",
+        "receiver": "Not yet. Is it worth checking out?"
+      },
+      {
+        "mgId": 5,
+        "sender": "Definitely! The sculptures are particularly impressive.",
+        "receiver": "I’ll make sure to visit this weekend."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "receiver_name": "James Smith",
+    "receiver_img": "https://shadcn-chat.vercel.app/User2.png",
+    "sender_img": "https://shadcn-chat.vercel.app/LoggedInUser.jpg",
+    "message": [
+      {
+        "mgId": 1,
+        "sender": "Did you hear about the new restaurant opening?",
+        "receiver": "Yes! I've heard their menu is really unique."
+      },
+      {
+        "mgId": 2,
+        "sender": "I think we should try it out this weekend.",
+        "receiver": "I'm in! Let's make a reservation."
+      },
+      {
+        "mgId": 3,
+        "sender": "How’s your project at work going?",
+        "receiver": "It's going well, but there’s still a lot to do."
+      },
+      {
+        "mgId": 4,
+        "sender": "Let me know if you need any help. I’m always here to assist.",
+        "receiver": "Thanks, I appreciate it! I might take you up on that."
+      },
+      {
+        "mgId": 5,
+        "sender": "Are you still planning to travel next month?",
+        "receiver": "Yes, I'm really looking forward to it. Can't wait!"
+      }
+    ]
+  }
+]
