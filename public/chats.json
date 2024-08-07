@@ -8,41 +8,56 @@
       {
         "mgId": 1,
         "sender": "Hey, do you have any plans for the weekend?",
-        "receiver": "Not yet. I was thinking of going hiking. Want to join?"
+        "receiver": "Not yet. I was thinking of going hiking. Want to join?",
+        "sender_time": "11.00 AM",
+        "receiver_time": "11.02 AM"
       },
       {
         "mgId": 2,
         "sender": "That sounds fun! Where are you planning to go?",
-        "receiver": "I was thinking about the trails at Green Mountain. The view is amazing there."
+        "receiver": "I was thinking about the trails at Green Mountain. The view is amazing there.",
+        "sender_time": "11.04 AM",
+        "receiver_time": "11.06 AM"
       },
       {
         "mgId": 3,
         "sender": "Have you tried that new cafe downtown?",
-        "receiver": "Not yet. Is it good?"
+        "receiver": "Not yet. Is it good?",
+        "sender_time": "11.08 AM",
+        "receiver_time": "11.10 AM"
       },
       {
         "mgId": 4,
         "sender": "Yeah, their coffee is excellent, and the pastries are to die for.",
-        "receiver": "Great! Let's go there for brunch tomorrow."
+        "receiver": "Great! Let's go there for brunch tomorrow.",
+        "sender_time": "11.12 AM",
+        "receiver_time": "11.14 AM"
       },
       {
         "mgId": 5,
         "sender": "Did you finish the book I lent you?",
-        "receiver": "Yes, I loved it! The plot twist at the end was incredible."
+        "receiver": "Yes, I loved it! The plot twist at the end was incredible.",
+        "sender_time": "11.16 AM",
+        "receiver_time": "11.18 AM"
       },
       {
         "mgId": 6,
         "sender": "What did you think of the movie last night?",
-        "receiver": "It was okay, but I felt like the ending was a bit rushed."
+        "receiver": "It was okay, but I felt like the ending was a bit rushed.",
+        "sender_time": "11.20 AM",
+        "receiver_time": "11.22 AM"
       },
       {
         "mgId": 7,
         "sender": "Are you coming to the party on Friday?",
-        "receiver": "I wouldn't miss it! What time does it start?"
+        "receiver": "I wouldn't miss it! What time does it start?",
+        "sender_time": "11.24 AM",
+        "receiver_time": "11.26 AM"
       },
       {
         "mgId": 8,
-        "receiver": "Not yet. No spoilers, please!"
+        "receiver": "Not yet. No spoilers, please!",
+        "receiver_time": "11.28 AM"
       }
     ]
   },
@@ -55,31 +70,42 @@
       {
         "mgId": 1,
         "sender": "How was your trip to Japan?",
-        "receiver": "It was amazing! The food, the culture, everything was wonderful."
+        "receiver": "It was amazing! The food, the culture, everything was wonderful.",
+        "sender_time": "12.00 PM",
+        "receiver_time": "12.02 PM"
       },
       {
         "mgId": 2,
         "sender": "I have always wanted to visit. Did you take lots of pictures?",
-        "receiver": "Yes, I took hundreds! I'll show you some later."
+        "receiver": "Yes, I took hundreds! I'll show you some later.",
+        "sender_time": "12.04 PM",
+        "receiver_time": "12.06 PM"
       },
       {
         "mgId": 3,
         "sender": "Are you free to catch up this week?",
-        "receiver": "Yes, I am. How about Thursday evening?"
+        "receiver": "Yes, I am. How about Thursday evening?",
+        "sender_time": "12.08 PM",
+        "receiver_time": "12.10 PM"
       },
       {
         "mgId": 4,
         "sender": "Thursday works for me. Let us meet at the usual spot.",
-        "receiver": "Sounds good. Looking forward to it!"
+        "receiver": "Sounds good. Looking forward to it!",
+        "sender_time": "12.12 PM",
+        "receiver_time": "12.14 PM"
       },
       {
         "mgId": 5,
         "sender": "What did you think of the game last night?",
-        "receiver": "It was intense! The final score was so close."
+        "receiver": "It was intense! The final score was so close.",
+        "sender_time": "12.16 PM",
+        "receiver_time": "12.18 PM"
       },
       {
         "mgId": 6,
-        "receiver": "Same here. Can't wait for the next match."
+        "receiver": "Same here. Can't wait for the next match.",
+        "receiver_time": "12.20 PM"
       }
     ]
   },
@@ -92,26 +118,35 @@
       {
         "mgId": 1,
         "sender": "Have you decided on the theme for the party?",
-        "receiver": "Yes, we're going with a tropical theme this year."
+        "receiver": "Yes, we're going with a tropical theme this year.",
+        "sender_time": "10.00 PM",
+        "receiver_time": "10.02 PM"
       },
       {
         "mgId": 2,
         "sender": "That sounds exciting! Do you need any help with the decorations?",
-        "receiver": "Actually, yes. Could you help me with the centerpieces?"
+        "receiver": "Actually, yes. Could you help me with the centerpieces?",
+        "sender_time": "10.04 PM",
+        "receiver_time": "10.06 PM"
       },
       {
         "mgId": 3,
         "sender": "Of course! Just let me know what you need.",
-        "receiver": "Thanks! I'll send you a list later."
+        "receiver": "Thanks! I'll send you a list later.",
+        "sender_time": "10.08 PM",
+        "receiver_time": "10.10 PM"
       },
       {
         "mgId": 4,
         "sender": "Have you seen the latest art exhibit at the gallery?",
-        "receiver": "Not yet. Is it worth checking out?"
+        "receiver": "Not yet. Is it worth checking out?",
+        "sender_time": "10.12 PM",
+        "receiver_time": "10.14 PM"
       },
       {
         "mgId": 5,
-        "receiver": "I will make sure to visit this weekend."
+        "receiver": "I will make sure to visit this weekend.",
+        "receiver_time": "10.16 PM"
       }
     ]
   },
@@ -124,26 +159,35 @@
       {
         "mgId": 1,
         "sender": "Did you hear about the new restaurant opening?",
-        "receiver": "Yes! I've heard their menu is really unique."
+        "receiver": "Yes! I've heard their menu is really unique.",
+        "sender_time": "10.00 AM",
+        "receiver_time": "10.02 AM"
       },
       {
         "mgId": 2,
         "sender": "I think we should try it out this weekend.",
-        "receiver": "I'm in! Let's make a reservation."
+        "receiver": "I'm in! Let's make a reservation.",
+        "sender_time": "10.04 AM",
+        "receiver_time": "10.06 AM"
       },
       {
         "mgId": 3,
         "sender": "How is your project at work going?",
-        "receiver": "It's going well, but there is still a lot to do."
+        "receiver": "It's going well, but there is still a lot to do.",
+        "sender_time": "10.08 AM",
+        "receiver_time": "10.10 AM"
       },
       {
         "mgId": 4,
         "sender": "Let me know if you need any help. I am always here to assist.",
-        "receiver": "Thanks, I appreciate it! I might take you up on that."
+        "receiver": "Thanks, I appreciate it! I might take you up on that.",
+        "sender_time": "10.12 AM",
+        "receiver_time": "10.14 AM"
       },
       {
         "mgId": 5,
-        "receiver": "Yes, I'm really looking forward to it. Can't wait!"
+        "receiver": "Yes, I'm really looking forward to it. Can't wait!",
+        "receiver_time": "10.16 AM"
       }
     ]
   }

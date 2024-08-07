@@ -12,14 +12,14 @@ import { RxDragHandleDots2 } from "react-icons/rx";
 const Chat = () => {
   const { data: chats, isLoading } = useFetchChatsQuery("chats.json");
   const [activeId, setActiveId] = useState(1);
-  const [activeChat, setActiveChat] = useState([]);
+  // const [activeChat, setActiveChat] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && chats.length) {
-      setActiveChat(chats.filter((chat) => chat.id === activeId));
-    }
-  }, [activeId, chats, isLoading]);
+  // useEffect(() => {
+  //   if (!isLoading && chats.length) {
+  //     setActiveChat(chats.filter((chat) => chat.id === activeId));
+  //   }
+  // }, [activeId, chats, isLoading]);
 
   if (isLoading) {
     return (
@@ -108,7 +108,7 @@ const Chat = () => {
           </div>
         </div>
         <div className='lg:max-w-[940px] lg:min-w-[700px] flex-1'>
-          {activeChat.length !== 0 && <ChatInterface activeChat={activeChat} activeId={activeId} />}
+          <ChatInterface activeId={activeId} />
         </div>
       </div>
       <div className='text-sm font-normal text-[#71717A] flex justify-between items-center mt-5'>

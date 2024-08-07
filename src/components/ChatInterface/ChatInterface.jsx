@@ -9,30 +9,51 @@ import { FiPlusCircle } from "react-icons/fi";
 import { FaRegFileCode } from "react-icons/fa";
 import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
+import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 
-const ChatInterface = ({ activeChat, activeId }) => {
-  const { receiver_name, receiver_img, sender_img, message } = activeChat[0];
-  const [activeText, setActiveText] = useState(message);
+function getCurrentTime() {
+  const now = new Date();
+
+  let hours = now.getHours();
+  const minutes = now.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+  const currentTime = `${hours}:${formattedMinutes} ${ampm}`;
+
+  return currentTime;
+}
+
+const ChatInterface = ({ activeId }) => {
+  const { data: chats } = useFetchChatsQuery("chats.json");
+  const [activeText, setActiveText] = useState([]);
+  const { receiver_name, receiver_img, sender_img, message } = activeText;
   const chatRef = useRef(null);
-  console.log(activeChat);
+  const [input, setInput] = useState([]);
+
+  useEffect(() => {
+    setActiveText(chats.find((chat) => chat.id === activeId));
+    setInput([]);
+  }, [activeId, chats]);
 
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [activeText]);
+  }, [activeText, input]);
 
   const handleText = (e) => {
     e.preventDefault();
     const form = e.target;
 
     const sender = form.inputText.value;
-    const sms = {
-      mgId: activeText.length + 1,
-      sender,
-    };
 
-    setActiveText([...activeText, sms]);
+    setInput([...input, sender]);
+
     form.reset();
   };
 
@@ -73,7 +94,7 @@ const ChatInterface = ({ activeChat, activeId }) => {
       <div
         ref={chatRef}
         className='h-[450px] overflow-x-hidden overflow-y-auto'>
-        {activeText.map((msg) => (
+        {message?.map((msg) => (
           <div key={msg.mgId} className=''>
             {msg.receiver && (
               <div className='flex items-center gap-3 p-4'>
@@ -86,15 +107,23 @@ const ChatInterface = ({ activeChat, activeId }) => {
                     className='w-10 h-10'
                   />
                 </div>
-                <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                  <p className='text-[13px]'>{msg.receiver}</p>
+                <div>
+                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                    <p className='text-[13px]'>{msg.receiver}</p>
+                  </div>
+                  <p className='text-[10px] mt-[2px]'>{msg.receiver_time}</p>
                 </div>
               </div>
             )}
             {msg.sender && (
               <div className='flex items-center gap-3 justify-end p-4'>
-                <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                  <p className='text-[13px]'>{msg.sender}</p>
+                <div>
+                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                    <p className='text-[13px]'>{msg.sender}</p>
+                  </div>
+                  <p className='text-[10px] mt-[2px] text-end'>
+                    {msg.sender_time}
+                  </p>
                 </div>
                 <div className=''>
                   <Image
@@ -109,6 +138,31 @@ const ChatInterface = ({ activeChat, activeId }) => {
             )}
           </div>
         ))}
+        {input.length !== 0 && (
+          <div>
+            {input.map((i, idx) => (
+              <div
+                key={idx}
+                className='flex items-center gap-3 justify-end p-4'>
+                <div>
+                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                    <p className='text-[13px]'>{i}</p>
+                  </div>
+                  <p className='text-[10px] mt-[2px] text-end'>{getCurrentTime()}</p>
+                </div>
+                <div className=''>
+                  <Image
+                    src={sender_img}
+                    alt=''
+                    width={100}
+                    height={100}
+                    className='w-10 h-10 rounded-full'
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       {/* Bottom Part */}
       <div className='px-4 py-2 flex items-center gap-3'>
