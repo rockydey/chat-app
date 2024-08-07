@@ -108,7 +108,7 @@ const Chat = () => {
           </div>
         </div>
         <div className='lg:max-w-[940px] lg:min-w-[700px] flex-1'>
-          {activeChat.length !== 0 && <ChatInterface activeChat={activeChat} />}
+          {activeChat.length !== 0 && <ChatInterface activeChat={activeChat} activeId={activeId} />}
         </div>
       </div>
       <div className='text-sm font-normal text-[#71717A] flex justify-between items-center mt-5'>

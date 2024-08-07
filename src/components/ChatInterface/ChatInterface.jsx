@@ -10,10 +10,11 @@ import { FaRegFileCode } from "react-icons/fa";
 import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 
-const ChatInterface = ({ activeChat }) => {
+const ChatInterface = ({ activeChat, activeId }) => {
   const { receiver_name, receiver_img, sender_img, message } = activeChat[0];
   const [activeText, setActiveText] = useState(message);
   const chatRef = useRef(null);
+  console.log(activeChat);
 
   useEffect(() => {
     if (chatRef.current) {
