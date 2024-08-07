@@ -10,7 +10,7 @@ import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 
 const ChatInterface = ({ activeChat }) => {
-  const { receiver_name, receiver_img, sender_img, message } = activeChat;
+  const { receiver_name, receiver_img, sender_img, message } = activeChat[0];
 
   return (
     <div className='flex flex-col'>
@@ -46,9 +46,44 @@ const ChatInterface = ({ activeChat }) => {
         </div>
       </div>
       {/* Middle Part */}
-      <div className='flex-1 overflow-x-hidden overflow-y-scroll'></div>
+      <div className='h-[450px] overflow-x-hidden overflow-y-scroll'>
+        {message.map((msg) => (
+          <div key={msg.mgId} className=''>
+            <div className='flex items-center gap-3 p-4'>
+              <div>
+                <Image
+                  src={receiver_img}
+                  alt={receiver_name}
+                  width={100}
+                  height={100}
+                  className='w-10 h-10'
+                />
+              </div>
+              <div className='max-w-80 bg-[#F4F4F5] p-3 rounded'>
+                <p className='text-[13px]'>{msg.receiver}</p>
+              </div>
+            </div>
+            {msg.sender && (
+              <div className='flex items-center gap-3 justify-end p-4'>
+                <div className='max-w-80 bg-[#F4F4F5] p-3 rounded'>
+                  <p className='text-[13px]'>{msg.sender}</p>
+                </div>
+                <div>
+                  <Image
+                    src={sender_img}
+                    alt=''
+                    width={100}
+                    height={100}
+                    className='w-10 h-10 rounded-full'
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
       {/* Bottom Part */}
-      <div className='mt-4 px-4 py-2 flex items-center gap-3'>
+      <div className='px-4 py-2 flex items-center gap-3'>
         <div className='text-xl text-[#71717A] flex items-center gap-3'>
           <Link href='#'>
             <FiPlusCircle />

@@ -42,7 +42,6 @@
       },
       {
         "mgId": 8,
-        "sender": "Have you seen the latest episode of that series?",
         "receiver": "Not yet. No spoilers, please!"
       }
     ]
@@ -80,7 +79,6 @@
       },
       {
         "mgId": 6,
-        "sender": "I know, right? I was on the edge of my seat the whole time.",
         "receiver": "Same here. Can't wait for the next match."
       }
     ]
@@ -113,7 +111,6 @@
       },
       {
         "mgId": 5,
-        "sender": "Definitely! The sculptures are particularly impressive.",
         "receiver": "I’ll make sure to visit this weekend."
       }
     ]
@@ -146,7 +143,6 @@
       },
       {
         "mgId": 5,
-        "sender": "Are you still planning to travel next month?",
         "receiver": "Yes, I'm really looking forward to it. Can't wait!"
       }
     ]

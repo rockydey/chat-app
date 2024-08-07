@@ -11,8 +11,7 @@ import Image from "next/image";
 const Chat = () => {
   const { data: chats, isLoading } = useFetchChatsQuery("chats.json");
   const [activeId, setActiveId] = useState(1);
-  const [activeChat, setActiveChat] = useState({});
-  console.log(activeId, activeChat);
+  const [activeChat, setActiveChat] = useState([]);
 
   useEffect(() => {
     if (!isLoading && chats.length) {
@@ -77,7 +76,10 @@ const Chat = () => {
                 <div>
                   <h4 className='text-sm font-medium'>{chat.receiver_name}</h4>
                   <p className='text-xs text-[#c7c7ceb7]'>
-                    {chat.message[chat.message.length - 1].sender.slice(0, 17)}
+                    {chat.message[chat.message.length - 1].receiver.slice(
+                      0,
+                      17
+                    )}
                     ...
                   </p>
                 </div>
@@ -86,9 +88,7 @@ const Chat = () => {
           </div>
         </div>
         <div className='lg:max-w-[944px] lg:min-w-[704px] flex-1'>
-          {activeChat.length !== 0 && (
-            <ChatInterface activeChat={activeChat[0]} />
-          )}
+          {activeChat.length !== 0 && <ChatInterface activeChat={activeChat} />}
         </div>
       </div>
       <div className='text-sm font-normal text-[#71717A] flex justify-between items-center mt-5'>
