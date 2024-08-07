@@ -10,6 +10,7 @@ import { FaRegFileCode } from "react-icons/fa";
 import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
+import { RxCrossCircled } from "react-icons/rx";
 
 function getCurrentTime() {
   const now = new Date();
@@ -34,6 +35,8 @@ const ChatInterface = ({ activeId }) => {
   const { receiver_name, receiver_img, sender_img, message } = activeText;
   const chatRef = useRef(null);
   const [input, setInput] = useState([]);
+  const [file, setFile] = useState([]);
+  const [display, setDisplay] = useState([]);
 
   useEffect(() => {
     setActiveText(chats.find((chat) => chat.id === activeId));
@@ -44,18 +47,31 @@ const ChatInterface = ({ activeId }) => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [activeText, input]);
+  }, [activeText, input, display]);
 
   const handleText = (e) => {
     e.preventDefault();
     const form = e.target;
 
-    const sender = form.inputText.value;
-
-    setInput([...input, sender]);
-
-    form.reset();
+    if (form.inputText !== undefined) {
+      const sender = form.inputText.value;
+      setInput([...input, sender]);
+      form.reset();
+    } else {
+      setDisplay(file);
+      setFile([]);
+    }
   };
+
+  const handleFile = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setFile((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  function deleteFile(e) {
+    const s = file.filter((item, index) => index !== e);
+    setFile(s);
+  }
 
   return (
     <div className='flex flex-col'>
@@ -97,8 +113,8 @@ const ChatInterface = ({ activeId }) => {
         {message?.map((msg) => (
           <div key={msg.mgId} className=''>
             {msg.receiver && (
-              <div className='flex items-center gap-3 p-4'>
-                <div className=''>
+              <div className='flex items-end gap-3 p-4'>
+                <div className='mb-[6px]'>
                   <Image
                     src={receiver_img}
                     alt={receiver_name}
@@ -111,21 +127,23 @@ const ChatInterface = ({ activeId }) => {
                   <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
                     <p className='text-[13px]'>{msg.receiver}</p>
                   </div>
-                  <p className='text-[10px] mt-[2px]'>{msg.receiver_time}</p>
+                  <p className='text-[10px] mt-[2px] pl-2'>
+                    {msg.receiver_time}
+                  </p>
                 </div>
               </div>
             )}
             {msg.sender && (
-              <div className='flex items-center gap-3 justify-end p-4'>
+              <div className='flex items-end gap-3 justify-end p-4'>
                 <div>
                   <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
                     <p className='text-[13px]'>{msg.sender}</p>
                   </div>
-                  <p className='text-[10px] mt-[2px] text-end'>
+                  <p className='text-[10px] mt-[2px] text-end pr-2'>
                     {msg.sender_time}
                   </p>
                 </div>
-                <div className=''>
+                <div className='mb-[6px]'>
                   <Image
                     src={sender_img}
                     alt=''
@@ -141,16 +159,16 @@ const ChatInterface = ({ activeId }) => {
         {input.length !== 0 && (
           <div>
             {input.map((i, idx) => (
-              <div
-                key={idx}
-                className='flex items-center gap-3 justify-end p-4'>
+              <div key={idx} className='flex items-end gap-3 justify-end p-4'>
                 <div>
                   <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
                     <p className='text-[13px]'>{i}</p>
                   </div>
-                  <p className='text-[10px] mt-[2px] text-end'>{getCurrentTime()}</p>
+                  <p className='text-[10px] mt-[2px] text-end pr-2'>
+                    {getCurrentTime()}
+                  </p>
                 </div>
-                <div className=''>
+                <div className='mb-[6px]'>
                   <Image
                     src={sender_img}
                     alt=''
@@ -163,6 +181,41 @@ const ChatInterface = ({ activeId }) => {
             ))}
           </div>
         )}
+        {display.length !== 0 && (
+          <div>
+            {display.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className='flex items-end gap-3 justify-end p-4'>
+                  <div>
+                    <div>
+                      <Image
+                        className='w-40 rounded'
+                        width={200}
+                        height={200}
+                        alt=''
+                        src={URL.createObjectURL(item)}
+                      />
+                    </div>
+                    <p className='text-[10px] mt-[2px] text-end pr-2'>
+                      {getCurrentTime()}
+                    </p>
+                  </div>
+                  <div className='mb-[6px]'>
+                    <Image
+                      src={sender_img}
+                      alt=''
+                      width={100}
+                      height={100}
+                      className='w-10 h-10 rounded-full'
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       {/* Bottom Part */}
       <div className='px-4 py-2 flex items-center gap-3'>
@@ -173,19 +226,62 @@ const ChatInterface = ({ activeId }) => {
           <Link href='#'>
             <FaRegFileCode className='text-lg' />
           </Link>
-          <Link href='#'>
+          {/* <Link href='#'>
             <MdAttachFile className='rotate-45' />
-          </Link>
+          </Link> */}
+          <div>
+            <input
+              onChange={handleFile}
+              type='file'
+              multiple
+              style={{ display: "none" }}
+              id='file'
+            />
+            <label className='cursor-pointer' htmlFor='file'>
+              <MdAttachFile className='rotate-45' />
+            </label>
+          </div>
         </div>
         <form onSubmit={handleText} className='flex-1 flex items-center gap-3'>
           <div className=' flex-1'>
-            <input
-              type='text'
-              name='inputText'
-              id=''
-              placeholder='Aa'
-              className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
-            />
+            {file.length !== 0 ? (
+              <div
+                className={`${
+                  file.length > 6 && "overflow-x-hidden overflow-y-scroll"
+                } w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full`}>
+                <div className='flex flex-wrap gap-3 h-[43px]'>
+                  {file.map((item, index) => {
+                    return (
+                      <div key={index} className='relative w-fit h-fit'>
+                        <Image
+                          className='w-16 rounded'
+                          width={200}
+                          height={200}
+                          alt=''
+                          src={URL.createObjectURL(item)}
+                        />
+                        <button
+                          onClick={() => deleteFile(index)}
+                          type='button'
+                          className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
+                          <RxCrossCircled className='text-base' />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <>
+                <input
+                  type='text'
+                  name='inputText'
+                  id=''
+                  placeholder='Aa'
+                  className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
+                />
+              </>
+            )}
           </div>
           <div>
             <button className='text-xl'>
