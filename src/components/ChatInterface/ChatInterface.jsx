@@ -1,6 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoCallOutline } from "react-icons/io5";
 import { CiVideoOn } from "react-icons/ci";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -11,6 +12,28 @@ import { IoMdSend } from "react-icons/io";
 
 const ChatInterface = ({ activeChat }) => {
   const { receiver_name, receiver_img, sender_img, message } = activeChat[0];
+  const [activeText, setActiveText] = useState(message);
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [activeText]);
+
+  const handleText = (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    const sender = form.inputText.value;
+    const sms = {
+      mgId: activeText.length + 1,
+      sender,
+    };
+
+    setActiveText([...activeText, sms]);
+    form.reset();
+  };
 
   return (
     <div className='flex flex-col'>
@@ -46,29 +69,33 @@ const ChatInterface = ({ activeChat }) => {
         </div>
       </div>
       {/* Middle Part */}
-      <div className='h-[450px] overflow-x-hidden overflow-y-scroll'>
-        {message.map((msg) => (
+      <div
+        ref={chatRef}
+        className='h-[450px] overflow-x-hidden overflow-y-auto'>
+        {activeText.map((msg) => (
           <div key={msg.mgId} className=''>
-            <div className='flex items-center gap-3 p-4'>
-              <div>
-                <Image
-                  src={receiver_img}
-                  alt={receiver_name}
-                  width={100}
-                  height={100}
-                  className='w-10 h-10'
-                />
+            {msg.receiver && (
+              <div className='flex items-center gap-3 p-4'>
+                <div className=''>
+                  <Image
+                    src={receiver_img}
+                    alt={receiver_name}
+                    width={100}
+                    height={100}
+                    className='w-10 h-10'
+                  />
+                </div>
+                <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                  <p className='text-[13px]'>{msg.receiver}</p>
+                </div>
               </div>
-              <div className='max-w-80 bg-[#F4F4F5] p-3 rounded'>
-                <p className='text-[13px]'>{msg.receiver}</p>
-              </div>
-            </div>
+            )}
             {msg.sender && (
               <div className='flex items-center gap-3 justify-end p-4'>
-                <div className='max-w-80 bg-[#F4F4F5] p-3 rounded'>
+                <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
                   <p className='text-[13px]'>{msg.sender}</p>
                 </div>
-                <div>
+                <div className=''>
                   <Image
                     src={sender_img}
                     alt=''
@@ -95,20 +122,22 @@ const ChatInterface = ({ activeChat }) => {
             <MdAttachFile className='rotate-45' />
           </Link>
         </div>
-        <div className='flex-1'>
-          <input
-            type='text'
-            name=''
-            id=''
-            placeholder='Aa'
-            className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
-          />
-        </div>
-        <div>
-          <button className='text-xl'>
-            <IoMdSend />
-          </button>
-        </div>
+        <form onSubmit={handleText} className='flex-1 flex items-center gap-3'>
+          <div className=' flex-1'>
+            <input
+              type='text'
+              name='inputText'
+              id=''
+              placeholder='Aa'
+              className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
+            />
+          </div>
+          <div>
+            <button className='text-xl'>
+              <IoMdSend />
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

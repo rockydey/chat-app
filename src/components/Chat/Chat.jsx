@@ -7,11 +7,13 @@ import ChatInterface from "../ChatInterface/ChatInterface";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import Image from "next/image";
+import { RxDragHandleDots2 } from "react-icons/rx";
 
 const Chat = () => {
   const { data: chats, isLoading } = useFetchChatsQuery("chats.json");
   const [activeId, setActiveId] = useState(1);
   const [activeChat, setActiveChat] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && chats.length) {
@@ -27,6 +29,10 @@ const Chat = () => {
     );
   }
 
+  const toggleDrawer = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div>
       <div className='flex justify-between items-center mb-5'>
@@ -38,8 +44,11 @@ const Chat = () => {
         </Link>
       </div>
       <div className='flex border border-[#c7c7cea5] rounded-lg h-full'>
-        <div className='lg:max-w-80 lg:min-w-20 flex-1 p-4 border-r border-[#c7c7cea5]'>
-          <div className='flex justify-between items-center mb-5'>
+        <div className={`${!isOpen ? "lg:min-w-80" : ""} p-4 flex-1 max-w-20`}>
+          <div
+            className={`${
+              !isOpen ? "lg:flex justify-between items-center mb-5" : ""
+            } hidden`}>
             <div>
               <h4 className='text-2xl font-medium'>
                 Chats <span className='text-[#D7D4D8]'>({chats.length})</span>
@@ -61,9 +70,13 @@ const Chat = () => {
                   setActiveId(chat.id);
                 }}
                 key={chat.id}
-                className={`flex items-center gap-6 px-5 py-4 rounded-md duration-500 cursor-pointer ${
+                className={`${
+                  isOpen
+                    ? "bg-[#fff] hover:bg-[#fff] duration-500"
+                    : "flex items-center gap-6 lg:px-5 rounded-md duration-500"
+                } ${
                   chat.id === activeId ? "bg-[#f9f9fa]" : "hover:bg-[#f1f1f3]"
-                }`}>
+                } py-4 cursor-pointer`}>
                 <div>
                   <Image
                     src={chat.receiver_img}
@@ -73,7 +86,7 @@ const Chat = () => {
                     className='w-10 h-10'
                   />
                 </div>
-                <div>
+                <div className={`${!isOpen && "lg:block"} hidden`}>
                   <h4 className='text-sm font-medium'>{chat.receiver_name}</h4>
                   <p className='text-xs text-[#c7c7ceb7]'>
                     {chat.message[chat.message.length - 1].receiver.slice(
@@ -87,7 +100,14 @@ const Chat = () => {
             ))}
           </div>
         </div>
-        <div className='lg:max-w-[944px] lg:min-w-[704px] flex-1'>
+        <div className='w-[1px] h-[575px] border-r border-[#c7c7cea5] relative'>
+          <div
+            onClick={toggleDrawer}
+            className='absolute cursor-not-allowed top-1/2 -left-2 bg-[#c7c7cea5] p-[1px] rounded-sm lg:cursor-pointer'>
+            <RxDragHandleDots2 className='text-xs' />
+          </div>
+        </div>
+        <div className='lg:max-w-[940px] lg:min-w-[700px] flex-1'>
           {activeChat.length !== 0 && <ChatInterface activeChat={activeChat} />}
         </div>
       </div>
