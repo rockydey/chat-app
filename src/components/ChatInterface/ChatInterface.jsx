@@ -407,8 +407,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   </div>
                   <div
                     className={`${
-                      msg.sender &&
-                      "lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded"
+                      msg.sender && "lg:max-w-80 bg-[#F4F4F5] p-3 rounded"
                     }`}>
                     <p className={`text-[13px]`}>{msg.sender}</p>
                   </div>
