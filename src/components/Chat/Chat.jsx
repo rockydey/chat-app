@@ -128,7 +128,7 @@ const Chat = () => {
           className={`${
             showChat ? "inline-block w-full" : "hidden"
           } lg:inline-block lg:max-w-[940px] lg:min-w-[700px] flex-1`}>
-          <ChatInterface setShowChat={setShowChat} activeId={activeId} />
+          <ChatInterface setShowChat={setShowChat} forMobile={forMobile} activeId={activeId} />
         </div>
       </div>
       <div className='text-sm font-normal text-[#71717A] flex flex-col lg:flex-row gap-2 justify-between items-center mt-5'>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { IoCallOutline } from "react-icons/io5";
 import { CiVideoOn } from "react-icons/ci";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { AiOutlineAudio, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
 import { FaRegFileCode } from "react-icons/fa";
 import { MdAttachFile } from "react-icons/md";
@@ -30,16 +30,18 @@ function getCurrentTime() {
   return currentTime;
 }
 
-const ChatInterface = ({ setShowChat, activeId }) => {
+const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   console.log(activeId);
   const { data: chats } = useFetchChatsQuery("chats.json");
   const [activeText, setActiveText] = useState([]);
   const { receiver_name, receiver_img, sender_img, message } = activeText;
   const chatRef = useRef(null);
   const [input, setInput] = useState([]);
+  const [attachment, setAttachment] = useState([]);
   const [file, setFile] = useState([]);
   const [display, setDisplay] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   useEffect(() => {
     setActiveText(chats.find((chat) => chat.id === activeId));
@@ -70,12 +72,13 @@ const ChatInterface = ({ setShowChat, activeId }) => {
     const sender = form.inputText.value;
 
     if (sender !== "" && file.length) {
-      setInput([...input, sender]);
+      setAttachment([...attachment, sender]);
       form.reset();
       setDisplay(file);
       setFile([]);
     } else if (sender === "" && file.length) {
       setDisplay(file);
+      setAttachment([]);
       setFile([]);
     } else if (sender !== "" && !file.length) {
       setInput([...input, sender]);
@@ -84,6 +87,7 @@ const ChatInterface = ({ setShowChat, activeId }) => {
   };
 
   const handleFile = (e) => {
+    setOpenTooltip(false);
     const newFiles = Array.from(e.target.files);
     if (newFiles.length <= 5) {
       setFile((prevFiles) => [...prevFiles, ...newFiles]);
@@ -205,6 +209,13 @@ const ChatInterface = ({ setShowChat, activeId }) => {
                   );
                 })}
               </div>
+              <div>
+                {attachment.length !== 0 && (
+                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                    <p className='text-[13px]'>{attachment}</p>
+                  </div>
+                )}
+              </div>
               <p className='text-[10px] mt-[2px] text-end pr-2'>
                 {getCurrentTime()}
               </p>
@@ -283,31 +294,62 @@ const ChatInterface = ({ setShowChat, activeId }) => {
           </div>
         )}
       </div>
-      <div className='px-4 pb-2 flex items-center gap-3'>
-        <div className='text-xl text-[#71717A] flex items-center gap-3'>
-          <Link href='#'>
-            <FiPlusCircle />
-          </Link>
-          <Link href='#'>
-            <FaRegFileCode className='text-lg' />
-          </Link>
-          {/* <Link href='#'>
-            <MdAttachFile className='rotate-45' />
-          </Link> */}
+      <div className='px-4 relative pb-2 flex items-center gap-3'>
+        {forMobile ? (
           <div>
-            <input
-              onChange={handleFile}
-              type='file'
-              disabled={file.length === 5}
-              multiple
-              style={{ display: "none" }}
-              id='file'
-            />
-            <label className='cursor-pointer' htmlFor='file'>
-              <MdAttachFile className='rotate-45' />
-            </label>
+            {openTooltip && (
+              <div className='text-xl -top-[46px] left-0 p-3 text-[#71717A] flex items-center gap-3 absolute bg-slate-100 shadow rounded-sm'>
+                <Link href='#'>
+                  <AiOutlineAudio />
+                </Link>
+                <Link href='#'>
+                  <FaRegFileCode className='text-lg' />
+                </Link>
+                <div>
+                  <input
+                    onChange={handleFile}
+                    type='file'
+                    disabled={file.length === 5}
+                    multiple
+                    style={{ display: "none" }}
+                    id='file'
+                  />
+                  <label className='cursor-pointer' htmlFor='file'>
+                    <MdAttachFile className='rotate-45' />
+                  </label>
+                </div>
+              </div>
+            )}
+            <Link
+              onClick={() => setOpenTooltip(!openTooltip)}
+              href='#'
+              className='text-xl text-[#71717A]'>
+              <FiPlusCircle />
+            </Link>
           </div>
-        </div>
+        ) : (
+          <div className='text-xl text-[#71717A] flex items-center gap-3'>
+            <Link href='#'>
+              <FiPlusCircle />
+            </Link>
+            <Link href='#'>
+              <FaRegFileCode className='text-lg' />
+            </Link>
+            <div>
+              <input
+                onChange={handleFile}
+                type='file'
+                disabled={file.length === 5}
+                multiple
+                style={{ display: "none" }}
+                id='file'
+              />
+              <label className='cursor-pointer' htmlFor='file'>
+                <MdAttachFile className='rotate-45' />
+              </label>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleText} className='flex-1 flex items-center gap-3'>
           <div className=' flex-1'>
             <input
