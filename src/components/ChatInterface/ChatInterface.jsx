@@ -30,11 +30,198 @@ function getCurrentTime() {
   return currentTime;
 }
 
+const conversation = [
+  {
+    id: 1,
+    message: [
+      {
+        mgId: 1,
+        sender: "Hey, do you have any plans for the weekend?",
+        receiver: "Not yet. I was thinking of going hiking. Want to join?",
+        sender_time: "11.00 AM",
+        receiver_time: "11.02 AM",
+      },
+      {
+        mgId: 2,
+        sender: "That sounds fun! Where are you planning to go?",
+        receiver:
+          "I was thinking about the trails at Green Mountain. The view is amazing there.",
+        sender_time: "11.04 AM",
+        receiver_time: "11.06 AM",
+      },
+      {
+        mgId: 3,
+        sender: "Have you tried that new cafe downtown?",
+        receiver: "Not yet. Is it good?",
+        sender_time: "11.08 AM",
+        receiver_time: "11.10 AM",
+      },
+      {
+        mgId: 4,
+        sender:
+          "Yeah, their coffee is excellent, and the pastries are to die for.",
+        receiver: "Great! Let's go there for brunch tomorrow.",
+        sender_time: "11.12 AM",
+        receiver_time: "11.14 AM",
+      },
+      {
+        mgId: 5,
+        sender: "Did you finish the book I lent you?",
+        receiver: "Yes, I loved it! The plot twist at the end was incredible.",
+        sender_time: "11.16 AM",
+        receiver_time: "11.18 AM",
+      },
+      {
+        mgId: 6,
+        sender: "What did you think of the movie last night?",
+        receiver: "It was okay, but I felt like the ending was a bit rushed.",
+        sender_time: "11.20 AM",
+        receiver_time: "11.22 AM",
+      },
+      {
+        mgId: 7,
+        sender: "Are you coming to the party on Friday?",
+        receiver: "I wouldn't miss it! What time does it start?",
+        sender_time: "11.24 AM",
+        receiver_time: "11.26 AM",
+      },
+      {
+        mgId: 8,
+        receiver: "Not yet. No spoilers, please!",
+        receiver_time: "11.28 AM",
+      },
+    ],
+  },
+  {
+    id: 2,
+    message: [
+      {
+        mgId: 1,
+        sender: "How was your trip to Japan?",
+        receiver:
+          "It was amazing! The food, the culture, everything was wonderful.",
+        sender_time: "12.00 PM",
+        receiver_time: "12.02 PM",
+      },
+      {
+        mgId: 2,
+        sender: "I have always wanted to visit. Did you take lots of pictures?",
+        receiver: "Yes, I took hundreds! I'll show you some later.",
+        sender_time: "12.04 PM",
+        receiver_time: "12.06 PM",
+      },
+      {
+        mgId: 3,
+        sender: "Are you free to catch up this week?",
+        receiver: "Yes, I am. How about Thursday evening?",
+        sender_time: "12.08 PM",
+        receiver_time: "12.10 PM",
+      },
+      {
+        mgId: 4,
+        sender: "Thursday works for me. Let us meet at the usual spot.",
+        receiver: "Sounds good. Looking forward to it!",
+        sender_time: "12.12 PM",
+        receiver_time: "12.14 PM",
+      },
+      {
+        mgId: 5,
+        sender: "What did you think of the game last night?",
+        receiver: "It was intense! The final score was so close.",
+        sender_time: "12.16 PM",
+        receiver_time: "12.18 PM",
+      },
+      {
+        mgId: 6,
+        receiver: "Same here. Can't wait for the next match.",
+        receiver_time: "12.20 PM",
+      },
+    ],
+  },
+  {
+    id: 3,
+    message: [
+      {
+        mgId: 1,
+        sender: "Have you decided on the theme for the party?",
+        receiver: "Yes, we're going with a tropical theme this year.",
+        sender_time: "10.00 PM",
+        receiver_time: "10.02 PM",
+      },
+      {
+        mgId: 2,
+        sender:
+          "That sounds exciting! Do you need any help with the decorations?",
+        receiver: "Actually, yes. Could you help me with the centerpieces?",
+        sender_time: "10.04 PM",
+        receiver_time: "10.06 PM",
+      },
+      {
+        mgId: 3,
+        sender: "Of course! Just let me know what you need.",
+        receiver: "Thanks! I'll send you a list later.",
+        sender_time: "10.08 PM",
+        receiver_time: "10.10 PM",
+      },
+      {
+        mgId: 4,
+        sender: "Have you seen the latest art exhibit at the gallery?",
+        receiver: "Not yet. Is it worth checking out?",
+        sender_time: "10.12 PM",
+        receiver_time: "10.14 PM",
+      },
+      {
+        mgId: 5,
+        receiver: "I will make sure to visit this weekend.",
+        receiver_time: "10.16 PM",
+      },
+    ],
+  },
+  {
+    id: 4,
+    message: [
+      {
+        mgId: 1,
+        sender: "Did you hear about the new restaurant opening?",
+        receiver: "Yes! I've heard their menu is really unique.",
+        sender_time: "10.00 AM",
+        receiver_time: "10.02 AM",
+      },
+      {
+        mgId: 2,
+        sender: "I think we should try it out this weekend.",
+        receiver: "I'm in! Let's make a reservation.",
+        sender_time: "10.04 AM",
+        receiver_time: "10.06 AM",
+      },
+      {
+        mgId: 3,
+        sender: "How is your project at work going?",
+        receiver: "It's going well, but there is still a lot to do.",
+        sender_time: "10.08 AM",
+        receiver_time: "10.10 AM",
+      },
+      {
+        mgId: 4,
+        sender: "Let me know if you need any help. I am always here to assist.",
+        receiver: "Thanks, I appreciate it! I might take you up on that.",
+        sender_time: "10.12 AM",
+        receiver_time: "10.14 AM",
+      },
+      {
+        mgId: 5,
+        receiver: "Yes, I'm really looking forward to it. Can't wait!",
+        receiver_time: "10.16 AM",
+      },
+    ],
+  },
+];
+
 const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
-  console.log(activeId);
   const { data: chats } = useFetchChatsQuery("chats.json");
+  const [message, setMessage] = useState([]);
   const [activeText, setActiveText] = useState([]);
-  const { receiver_name, receiver_img, sender_img, message } = activeText;
+  const { receiver_name, receiver_img, sender_img } = activeText;
   const chatRef = useRef(null);
   const [input, setInput] = useState([]);
   const [attachment, setAttachment] = useState([]);
@@ -42,6 +229,11 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const [display, setDisplay] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
+  console.log(message);
+
+  useEffect(() => {
+    setMessage(conversation.find((c) => c.id === activeId).message);
+  }, [activeId]);
 
   useEffect(() => {
     setActiveText(chats.find((chat) => chat.id === activeId));
@@ -53,7 +245,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [activeText, input, display]);
+  }, [activeText, input, display, message]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,17 +263,41 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     const form = e.target;
     const sender = form.inputText.value;
 
+    const activeMessage = [...message];
+
     if (sender !== "" && file.length) {
-      setAttachment([...attachment, sender]);
-      form.reset();
-      setDisplay(file);
+      const newMessage = {
+        mgId: message.length + 1,
+        sender: sender,
+        sender_time: getCurrentTime(),
+        image: [...file],
+      };
+      console.log(newMessage);
+      setMessage([...activeMessage, newMessage]);
+
       setFile([]);
+      form.reset();
     } else if (sender === "" && file.length) {
-      setDisplay(file);
-      setAttachment([]);
+      const newMessage = {
+        mgId: message.length + 1,
+        sender_time: getCurrentTime(),
+        sender: "",
+        image: [...file],
+      };
+      console.log(newMessage);
+      setMessage([...activeMessage, newMessage]);
+
       setFile([]);
     } else if (sender !== "" && !file.length) {
-      setInput([...input, sender]);
+      const newMessage = {
+        mgId: message.length + 1,
+        sender: sender,
+        sender_time: getCurrentTime(),
+        image: [],
+      };
+      console.log(newMessage);
+      setMessage([...message, newMessage]);
+
       form.reset();
     }
   };
@@ -164,11 +380,37 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                 </div>
               </div>
             )}
-            {msg.sender && (
+            {(msg.sender === "" || msg.sender) && (
               <div className='flex items-end gap-3 justify-end p-4'>
                 <div>
-                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                    <p className='text-[13px]'>{msg.sender}</p>
+                  <div
+                    className={`${
+                      msg?.image?.length > 1 && "grid grid-cols-2"
+                    }`}>
+                    {msg?.image?.map((item, index) => {
+                      return (
+                        <div key={index}>
+                          <div>
+                            <div>
+                              <Image
+                                className='w-32 lg:w-40 rounded'
+                                width={200}
+                                height={200}
+                                alt=''
+                                src={URL.createObjectURL(item)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div
+                    className={`${
+                      msg.sender &&
+                      "lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded"
+                    }`}>
+                    <p className={`text-[13px]`}>{msg.sender}</p>
                   </div>
                   <p className='text-[10px] mt-[2px] text-end pr-2'>
                     {msg.sender_time}
@@ -187,7 +429,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             )}
           </div>
         ))}
-        {display.length !== 0 && (
+        {/* {display.length !== 0 && (
           <div className='flex items-end gap-3 justify-end p-4'>
             <div>
               <div className={`${display.length > 1 && "grid grid-cols-2"}`}>
@@ -255,7 +497,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
               </div>
             ))}
           </div>
-        )}
+        )} */}
       </div>
       {/* Bottom Part */}
       <div className='lg:pl-[125px]'>
