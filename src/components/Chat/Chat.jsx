@@ -43,8 +43,11 @@ const Chat = () => {
           <FaGithub />
         </Link>
       </div>
-      <div className='flex border border-[#c7c7cea5] rounded-lg h-full'>
-        <div className={`${!isOpen ? "lg:min-w-80" : ""} p-4 flex-1 max-w-20`}>
+      <div className='flex border border-[#c7c7cea5] rounded-lg h-[600px]'>
+        <div
+          className={`${
+            !isOpen ? "lg:min-w-80" : ""
+          } p-4 flex-1 max-w-20 border-r border-[#c7c7cea5]`}>
           <div
             className={`${
               !isOpen ? "lg:flex justify-between items-center mb-5" : ""
@@ -100,7 +103,7 @@ const Chat = () => {
             ))}
           </div>
         </div>
-        <div className='w-[1px] h-[575px] border-r border-[#c7c7cea5] relative'>
+        <div className='w-[1px] border-r border-[#c7c7cea5] relative'>
           <div
             onClick={toggleDrawer}
             className='absolute cursor-not-allowed top-1/2 -left-2 bg-[#c7c7cea5] p-[1px] rounded-sm lg:cursor-pointer'>

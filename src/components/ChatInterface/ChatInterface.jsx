@@ -37,10 +37,12 @@ const ChatInterface = ({ activeId }) => {
   const [input, setInput] = useState([]);
   const [file, setFile] = useState([]);
   const [display, setDisplay] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setActiveText(chats.find((chat) => chat.id === activeId));
     setInput([]);
+    setDisplay([]);
   }, [activeId, chats]);
 
   useEffect(() => {
@@ -48,6 +50,17 @@ const ChatInterface = ({ activeId }) => {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [activeText, input, display]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleText = (e) => {
     e.preventDefault();
@@ -57,7 +70,8 @@ const ChatInterface = ({ activeId }) => {
       const sender = form.inputText.value;
       setInput([...input, sender]);
       form.reset();
-    } else {
+    }
+    if (file.length) {
       setDisplay(file);
       setFile([]);
     }
@@ -74,7 +88,7 @@ const ChatInterface = ({ activeId }) => {
   }
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col justify-between h-full'>
       {/* Top Part */}
       <div className='p-4 border-b border-[#c7c7cea5] flex justify-between items-center'>
         <div className='flex items-center gap-4'>
@@ -109,7 +123,7 @@ const ChatInterface = ({ activeId }) => {
       {/* Middle Part */}
       <div
         ref={chatRef}
-        className='h-[450px] overflow-x-hidden overflow-y-auto'>
+        className={`h-[450px] overflow-x-hidden overflow-y-auto`}>
         {message?.map((msg) => (
           <div key={msg.mgId} className=''>
             {msg.receiver && (
@@ -156,31 +170,6 @@ const ChatInterface = ({ activeId }) => {
             )}
           </div>
         ))}
-        {input.length !== 0 && (
-          <div>
-            {input.map((i, idx) => (
-              <div key={idx} className='flex items-end gap-3 justify-end p-4'>
-                <div>
-                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                    <p className='text-[13px]'>{i}</p>
-                  </div>
-                  <p className='text-[10px] mt-[2px] text-end pr-2'>
-                    {getCurrentTime()}
-                  </p>
-                </div>
-                <div className='mb-[6px]'>
-                  <Image
-                    src={sender_img}
-                    alt=''
-                    width={100}
-                    height={100}
-                    className='w-10 h-10 rounded-full'
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
         {display.length !== 0 && (
           <div>
             {display.map((item, index) => {
@@ -216,8 +205,69 @@ const ChatInterface = ({ activeId }) => {
             })}
           </div>
         )}
+        {input[0] !== "" && input.length !== 0 && (
+          <div>
+            {input.map((i, idx) => (
+              <div key={idx} className='flex items-end gap-3 justify-end p-4'>
+                <div>
+                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                    <p className='text-[13px]'>{i}</p>
+                  </div>
+                  <p className='text-[10px] mt-[2px] text-end pr-2'>
+                    {getCurrentTime()}
+                  </p>
+                </div>
+                <div className='mb-[6px]'>
+                  <Image
+                    src={sender_img}
+                    alt=''
+                    width={100}
+                    height={100}
+                    className='w-10 h-10 rounded-full'
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       {/* Bottom Part */}
+      <div className='pt-2 lg:pl-24 lg:pr-14'>
+        {file.length !== 0 && (
+          <div
+            className={`${
+              !isMobile &&
+              file.length > 6 &&
+              "overflow-x-hidden overflow-y-scroll"
+            } ${
+              isMobile &&
+              file.length > 3 &&
+              "overflow-x-hidden overflow-y-scroll"
+            }  w-full py-1 px-5`}>
+            <div className='flex flex-wrap gap-3 h-[43px]'>
+              {file.map((item, index) => {
+                return (
+                  <div key={index} className='relative w-fit h-fit'>
+                    <Image
+                      className='w-16 rounded'
+                      width={200}
+                      height={200}
+                      alt=''
+                      src={URL.createObjectURL(item)}
+                    />
+                    <button
+                      onClick={() => deleteFile(index)}
+                      type='button'
+                      className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
+                      <RxCrossCircled className='text-base' />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
       <div className='px-4 py-2 flex items-center gap-3'>
         <div className='text-xl text-[#71717A] flex items-center gap-3'>
           <Link href='#'>
@@ -244,44 +294,13 @@ const ChatInterface = ({ activeId }) => {
         </div>
         <form onSubmit={handleText} className='flex-1 flex items-center gap-3'>
           <div className=' flex-1'>
-            {file.length !== 0 ? (
-              <div
-                className={`${
-                  file.length > 6 && "overflow-x-hidden overflow-y-scroll"
-                } w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full`}>
-                <div className='flex flex-wrap gap-3 h-[43px]'>
-                  {file.map((item, index) => {
-                    return (
-                      <div key={index} className='relative w-fit h-fit'>
-                        <Image
-                          className='w-16 rounded'
-                          width={200}
-                          height={200}
-                          alt=''
-                          src={URL.createObjectURL(item)}
-                        />
-                        <button
-                          onClick={() => deleteFile(index)}
-                          type='button'
-                          className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
-                          <RxCrossCircled className='text-base' />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <>
-                <input
-                  type='text'
-                  name='inputText'
-                  id=''
-                  placeholder='Aa'
-                  className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
-                />
-              </>
-            )}
+            <input
+              type='text'
+              name='inputText'
+              id=''
+              placeholder='Aa'
+              className='w-full border border-[#dcdce1] outline-none py-1 px-5 rounded-full'
+            />
           </div>
           <div>
             <button className='text-xl'>
