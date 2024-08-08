@@ -51,9 +51,9 @@ const Chat = () => {
       </div>
       <div className='flex border border-[#c7c7cea5] rounded-lg h-[500px] lg:h-[600px]'>
         <div
-          className={`${showChat ? "hidden" : "inline-block"}  ${
-            !isOpen ? "lg:min-w-80" : ""
-          } p-4 flex-1 w-full lg:max-w-20 lg:border-r lg:border-[#c7c7cea5]`}>
+          className={`${showChat ? "hidden" : "inline-block"} transform  ${
+            !isOpen ? "lg:min-w-80 translate-x-0" : "translate-x-0"
+          } transition-transform duration-300 ease-in-out p-4 flex-1 w-full lg:max-w-20 lg:border-r lg:border-[#c7c7cea5]`}>
           <div
             className={`${
               isOpen ? "hidden" : ""
@@ -127,8 +127,14 @@ const Chat = () => {
         <div
           className={`${
             showChat ? "inline-block w-full" : "hidden"
-          } lg:inline-block lg:max-w-[940px] lg:min-w-[700px] flex-1`}>
-          <ChatInterface setShowChat={setShowChat} forMobile={forMobile} activeId={activeId} />
+          } lg:inline-block lg:max-w-[940px] lg:min-w-[700px] ${
+            isOpen ? "translate-x-0" : ""
+          } flex-1 transform transition-transform duration-500 ease-in-out`}>
+          <ChatInterface
+            setShowChat={setShowChat}
+            forMobile={forMobile}
+            activeId={activeId}
+          />
         </div>
       </div>
       <div className='text-sm font-normal text-[#71717A] flex flex-col lg:flex-row gap-2 justify-between items-center mt-5'>
