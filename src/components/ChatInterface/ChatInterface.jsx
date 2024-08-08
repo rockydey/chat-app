@@ -193,7 +193,7 @@ const ChatInterface = ({ setShowChat, activeId }) => {
                       <div>
                         <div>
                           <Image
-                            className='w-40 rounded'
+                            className='w-32 lg:w-40 rounded'
                             width={200}
                             height={200}
                             alt=''
