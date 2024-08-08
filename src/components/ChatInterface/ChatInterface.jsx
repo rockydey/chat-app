@@ -11,6 +11,7 @@ import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { RxCrossCircled } from "react-icons/rx";
+import { FaArrowLeft } from "react-icons/fa6";
 
 function getCurrentTime() {
   const now = new Date();
@@ -29,7 +30,8 @@ function getCurrentTime() {
   return currentTime;
 }
 
-const ChatInterface = ({ activeId }) => {
+const ChatInterface = ({ setShowChat, activeId }) => {
+  console.log(activeId);
   const { data: chats } = useFetchChatsQuery("chats.json");
   const [activeText, setActiveText] = useState([]);
   const { receiver_name, receiver_img, sender_img, message } = activeText;
@@ -65,21 +67,29 @@ const ChatInterface = ({ activeId }) => {
   const handleText = (e) => {
     e.preventDefault();
     const form = e.target;
+    const sender = form.inputText.value;
 
-    if (form.inputText !== undefined) {
-      const sender = form.inputText.value;
+    if (sender !== "" && file.length) {
       setInput([...input, sender]);
       form.reset();
-    }
-    if (file.length) {
       setDisplay(file);
       setFile([]);
+    } else if (sender === "" && file.length) {
+      setDisplay(file);
+      setFile([]);
+    } else if (sender !== "" && !file.length) {
+      setInput([...input, sender]);
+      form.reset();
     }
   };
 
   const handleFile = (e) => {
     const newFiles = Array.from(e.target.files);
-    setFile((prevFiles) => [...prevFiles, ...newFiles]);
+    if (newFiles.length <= 5) {
+      setFile((prevFiles) => [...prevFiles, ...newFiles]);
+    } else {
+      alert("Maximum 5 file only");
+    }
   };
 
   function deleteFile(e) {
@@ -92,6 +102,9 @@ const ChatInterface = ({ activeId }) => {
       {/* Top Part */}
       <div className='p-4 border-b border-[#c7c7cea5] flex justify-between items-center'>
         <div className='flex items-center gap-4'>
+          <div onClick={() => setShowChat(false)} className='lg:hidden'>
+            <FaArrowLeft />
+          </div>
           <div>
             <Image
               src={receiver_img}
@@ -171,38 +184,40 @@ const ChatInterface = ({ activeId }) => {
           </div>
         ))}
         {display.length !== 0 && (
-          <div>
-            {display.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className='flex items-end gap-3 justify-end p-4'>
-                  <div>
-                    <div>
-                      <Image
-                        className='w-40 rounded'
-                        width={200}
-                        height={200}
-                        alt=''
-                        src={URL.createObjectURL(item)}
-                      />
+          <div className='flex items-end gap-3 justify-end p-4'>
+            <div>
+              <div className={`${display.length > 1 && "grid grid-cols-2"}`}>
+                {display.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <div>
+                        <div>
+                          <Image
+                            className='w-40 rounded'
+                            width={200}
+                            height={200}
+                            alt=''
+                            src={URL.createObjectURL(item)}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <p className='text-[10px] mt-[2px] text-end pr-2'>
-                      {getCurrentTime()}
-                    </p>
-                  </div>
-                  <div className='mb-[6px]'>
-                    <Image
-                      src={sender_img}
-                      alt=''
-                      width={100}
-                      height={100}
-                      className='w-10 h-10 rounded-full'
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+              <p className='text-[10px] mt-[2px] text-end pr-2'>
+                {getCurrentTime()}
+              </p>
+            </div>
+            <div className='mb-[6px]'>
+              <Image
+                src={sender_img}
+                alt=''
+                width={100}
+                height={100}
+                className='w-10 h-10 rounded-full'
+              />
+            </div>
           </div>
         )}
         {input[0] !== "" && input.length !== 0 && (
@@ -232,7 +247,7 @@ const ChatInterface = ({ activeId }) => {
         )}
       </div>
       {/* Bottom Part */}
-      <div className='pt-2 lg:pl-24 lg:pr-14'>
+      <div className='lg:pl-[125px]'>
         {file.length !== 0 && (
           <div
             className={`${
@@ -243,13 +258,13 @@ const ChatInterface = ({ activeId }) => {
               isMobile &&
               file.length > 3 &&
               "overflow-x-hidden overflow-y-scroll"
-            }  w-full py-1 px-5`}>
-            <div className='flex flex-wrap gap-3 h-[43px]'>
+            } bg-slate-200 px-2 pt-2 rounded-sm w-fit`}>
+            <div className='flex flex-wrap gap-3 h-[48px]'>
               {file.map((item, index) => {
                 return (
                   <div key={index} className='relative w-fit h-fit'>
                     <Image
-                      className='w-16 rounded'
+                      className='h-10 w-auto rounded'
                       width={200}
                       height={200}
                       alt=''
@@ -268,7 +283,7 @@ const ChatInterface = ({ activeId }) => {
           </div>
         )}
       </div>
-      <div className='px-4 py-2 flex items-center gap-3'>
+      <div className='px-4 pb-2 flex items-center gap-3'>
         <div className='text-xl text-[#71717A] flex items-center gap-3'>
           <Link href='#'>
             <FiPlusCircle />
@@ -283,6 +298,7 @@ const ChatInterface = ({ activeId }) => {
             <input
               onChange={handleFile}
               type='file'
+              disabled={file.length === 5}
               multiple
               style={{ display: "none" }}
               id='file'
