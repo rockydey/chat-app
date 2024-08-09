@@ -390,7 +390,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         {message?.map((msg) => (
           <div key={msg.mgId} className=''>
             {msg.receiver && (
-              <div className='flex items-end gap-3 p-4 lg:max-w-80'>
+              <div className='flex items-end gap-3 p-4'>
                 <div className='mb-[6px]'>
                   <Image
                     src={receiver_img}
@@ -401,7 +401,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   />
                 </div>
                 <div>
-                  <div className='bg-[#F4F4F5] p-3 rounded'>
+                  <div className='bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80'>
                     <p className='text-[13px]'>{msg.receiver}</p>
                   </div>
                   <p className='text-[10px] mt-[2px] pl-2'>
