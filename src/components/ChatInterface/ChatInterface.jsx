@@ -7,13 +7,18 @@ import { CiVideoOn } from "react-icons/ci";
 import { AiOutlineAudio, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
 import { FaRegFileCode } from "react-icons/fa";
-import { MdAttachFile, MdOutlineFileDownload } from "react-icons/md";
+import {
+  MdAttachFile,
+  MdDownload,
+  MdOutlineFileDownload,
+} from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { RxCrossCircled } from "react-icons/rx";
 import { FaArrowLeft } from "react-icons/fa6";
 import Modal from "react-modal";
 import styles from "./ChatInterface.module.css";
+import { BsFileEarmarkPdf } from "react-icons/bs";
 
 function getCurrentTime() {
   const now = new Date();
@@ -233,6 +238,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [modalImage, setModalImage] = useState(null);
   const [buttonAnimation, setButtonAnimation] = useState("");
+  console.log(message);
 
   useEffect(() => {
     setMessage(conversation.find((c) => c.id === activeId).message);
@@ -316,20 +322,31 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
 
   const handleFile = (e) => {
     setOpenTooltip(false);
-    const newFiles = Array.from(e.target.files);
-    if (newFiles.length <= 5) {
-      const newImages = newFiles.map((file) => {
+    const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length <= 5) {
+      const newFiles = selectedFiles.map((file) => {
         return new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = (e) => {
-            resolve(e.target.result);
+            resolve({
+              name: file.name,
+              type: file.type,
+              data: e.target.result,
+            });
           };
-          reader.readAsDataURL(file);
+          if (
+            file.type.startsWith("image/") ||
+            file.type.startsWith("video/")
+          ) {
+            reader.readAsDataURL(file);
+          } else if (file.type === "application/pdf") {
+            reader.readAsArrayBuffer(file);
+          }
         });
       });
 
-      Promise.all(newImages).then((newImagesData) => {
-        setFile((prevImages) => [...prevImages, ...newImagesData]);
+      Promise.all(newFiles).then((newFilesData) => {
+        setFile((prevFiles) => [...prevFiles, ...newFilesData]);
       });
     } else {
       alert("Maximum 5 file only");
@@ -356,6 +373,18 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       callback();
     }, 500);
   };
+
+  function downloadPDF(arrayBuffer, name) {
+    const blob = new Blob([arrayBuffer], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <div className='flex flex-col justify-between h-full'>
@@ -426,28 +455,58 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                 <div>
                   <div
                     className={`${
-                      msg?.image?.length > 1 && "grid grid-cols-2"
+                      msg?.image?.length > 1
+                        ? msg?.image[0]?.type === "application/pdf"
+                          ? "space-y-[2px]"
+                          : "grid grid-cols-2 gap-[2px]"
+                        : ""
                     } max-w-60 lg:max-w-80`}>
                     {msg?.image?.map((item, index) => {
                       return (
                         <div key={index}>
-                          <div>
-                            <div className='group relative w-full'>
-                              <Image
-                                className='rounded cursor-pointer w-full object-cover transition duration-300 ease-in-out'
-                                width={200}
-                                height={200}
-                                alt=''
-                                src={item}
-                              />
-                              <div
-                                onClick={() => {
-                                  openModal();
-                                  setModalImage(item);
-                                }}
-                                class='absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition duration-300 ease-in-out cursor-pointer'></div>
+                          {item.type.startsWith("image/") && (
+                            <div>
+                              <div className='group relative w-full'>
+                                <Image
+                                  className='rounded cursor-pointer w-full object-cover transition duration-300 ease-in-out'
+                                  width={200}
+                                  height={200}
+                                  alt=''
+                                  src={item.data}
+                                />
+                                <div
+                                  onClick={() => {
+                                    openModal();
+                                    setModalImage(item.data);
+                                  }}
+                                  class='absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition duration-300 ease-in-out cursor-pointer'></div>
+                              </div>
                             </div>
-                          </div>
+                          )}
+                          {item.type.startsWith("video/") && (
+                            <video
+                              src={item.data}
+                              controls
+                              style={{ width: "100%", cursor: "pointer" }}
+                            />
+                          )}
+                          {item.type === "application/pdf" && (
+                            <div className='flex items-center gap-3 bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80'>
+                              <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
+                                <BsFileEarmarkPdf />
+                                <p>{item.name}</p>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  downloadPDF(item.data, item.name);
+                                  e.stopPropagation();
+                                }}
+                                type='button'
+                                className='shadow bg-color7 text-color5 rounded-full'>
+                                <MdDownload className='text-lg' />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -479,35 +538,68 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       </div>
 
       {/* Bottom Part */}
-      <div className='lg:pl-[125px]'>
+      <div className='lg:pl-[125px] lg:pr-16 pl-16 pr-5'>
         {file.length !== 0 && (
           <div
             className={`${
-              !isMobile &&
-              file.length > 6 &&
-              "overflow-x-hidden overflow-y-scroll"
-            } ${
               isMobile &&
-              file.length > 3 &&
-              "overflow-x-hidden overflow-y-scroll"
-            } bg-slate-200 px-2 pt-2 rounded-sm w-fit`}>
-            <div className='flex flex-wrap gap-3 h-[48px]'>
+              file.length > 1 &&
+              "overflow-x-hidden overflow-y-scroll h-12"
+            }  bg-slate-200 px-2 pt-2 rounded-sm w-fit`}>
+            <div className='flex flex-wrap gap-3'>
               {file.map((item, index) => {
                 return (
-                  <div key={index} className='relative w-fit h-fit'>
-                    <Image
-                      className='h-10 w-auto rounded'
-                      width={200}
-                      height={200}
-                      alt=''
-                      src={item}
-                    />
-                    <button
-                      onClick={() => deleteFile(index)}
-                      type='button'
-                      className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
-                      <RxCrossCircled className='text-base' />
-                    </button>
+                  <div key={index}>
+                    {item.type.startsWith("image/") && (
+                      <div className='relative w-fit h-[46px]'>
+                        <Image
+                          className='h-10 w-auto rounded'
+                          width={200}
+                          height={200}
+                          alt=''
+                          src={item.data}
+                        />
+                        <button
+                          onClick={() => deleteFile(index)}
+                          type='button'
+                          className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
+                          <RxCrossCircled className='text-base' />
+                        </button>
+                      </div>
+                    )}
+                    {item.type.startsWith("video/") && (
+                      <div className='relative w-fit h-[46px]'>
+                        <video
+                          src={item.data}
+                          controls
+                          style={{
+                            width: "auto",
+                            height: "40px",
+                            cursor: "pointer",
+                          }}
+                        />
+                        <button
+                          onClick={() => deleteFile(index)}
+                          type='button'
+                          className='absolute top-0 bg-white left-0 shadow-md bg-color7 text-color5 rounded-full'>
+                          <RxCrossCircled className='text-base' />
+                        </button>
+                      </div>
+                    )}
+                    {item.type === "application/pdf" && (
+                      <div className='flex items-center gap-2 p-1'>
+                        <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
+                          <BsFileEarmarkPdf />
+                          <p>{item.name}</p>
+                        </div>
+                        <button
+                          onClick={() => deleteFile(index)}
+                          type='button'
+                          className=' bg-white shadow-md bg-color7 text-color5 rounded-full'>
+                          <RxCrossCircled className='text-base' />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -530,6 +622,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   <input
                     onChange={handleFile}
                     type='file'
+                    accept='image/*,video/*,application/pdf'
                     disabled={file.length === 5}
                     multiple
                     style={{ display: "none" }}
@@ -560,6 +653,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
               <input
                 onChange={handleFile}
                 type='file'
+                accept='image/*,video/*,application/pdf'
                 disabled={file.length === 5}
                 multiple
                 style={{ display: "none" }}
