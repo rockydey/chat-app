@@ -456,7 +456,9 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   <div
                     className={`${
                       msg?.image?.length > 1
-                        ? msg?.image[0]?.type === "application/pdf"
+                        ? msg?.image?.find(
+                            (img) => img.type === "application/pdf"
+                          )
                           ? "space-y-[2px]"
                           : "grid grid-cols-2 gap-[2px]"
                         : ""
