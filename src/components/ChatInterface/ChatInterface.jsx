@@ -11,7 +11,7 @@ import { MdAttachFile } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { RxCrossCircled } from "react-icons/rx";
-import { FaArrowLeft } from "react-icons/fa6";
+import { FaArrowLeft, FaPlus } from "react-icons/fa6";
 
 function getCurrentTime() {
   const now = new Date();
@@ -224,12 +224,10 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const { receiver_name, receiver_img, sender_img } = activeText;
   const chatRef = useRef(null);
   const [input, setInput] = useState([]);
-  const [attachment, setAttachment] = useState([]);
   const [file, setFile] = useState([]);
   const [display, setDisplay] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
-  console.log(message);
 
   useEffect(() => {
     setMessage(conversation.find((c) => c.id === activeId).message);
@@ -272,9 +270,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         sender_time: getCurrentTime(),
         image: [...file],
       };
-      console.log(newMessage);
       setMessage([...activeMessage, newMessage]);
-
       setFile([]);
       form.reset();
     } else if (sender === "" && file.length) {
@@ -284,9 +280,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         sender: "",
         image: [...file],
       };
-      console.log(newMessage);
       setMessage([...activeMessage, newMessage]);
-
       setFile([]);
     } else if (sender !== "" && !file.length) {
       const newMessage = {
@@ -295,9 +289,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         sender_time: getCurrentTime(),
         image: [],
       };
-      console.log(newMessage);
       setMessage([...message, newMessage]);
-
       form.reset();
     }
   };
@@ -353,6 +345,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
           </Link>
         </div>
       </div>
+
       {/* Middle Part */}
       <div
         ref={chatRef}
@@ -360,7 +353,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         {message?.map((msg) => (
           <div key={msg.mgId} className=''>
             {msg.receiver && (
-              <div className='flex items-end gap-3 p-4'>
+              <div className='flex items-end gap-3 p-4 lg:max-w-80'>
                 <div className='mb-[6px]'>
                   <Image
                     src={receiver_img}
@@ -371,7 +364,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   />
                 </div>
                 <div>
-                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
+                  <div className='bg-[#F4F4F5] p-3 rounded'>
                     <p className='text-[13px]'>{msg.receiver}</p>
                   </div>
                   <p className='text-[10px] mt-[2px] pl-2'>
@@ -386,19 +379,22 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   <div
                     className={`${
                       msg?.image?.length > 1 && "grid grid-cols-2"
-                    }`}>
+                    } max-w-60 lg:max-w-80`}>
                     {msg?.image?.map((item, index) => {
                       return (
                         <div key={index}>
                           <div>
-                            <div>
+                            <div className='group relative w-full'>
                               <Image
-                                className='w-32 lg:w-40 rounded'
+                                className='rounded cursor-pointer w-full object-cover transition duration-300 ease-in-out'
                                 width={200}
                                 height={200}
                                 alt=''
                                 src={URL.createObjectURL(item)}
                               />
+                              <div
+                                onClick={() => console.log("hello")}
+                                class='absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition duration-300 ease-in-out cursor-pointer'></div>
                             </div>
                           </div>
                         </div>
@@ -407,7 +403,8 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   </div>
                   <div
                     className={`${
-                      msg.sender && "lg:max-w-80 bg-[#F4F4F5] p-3 rounded"
+                      msg.sender &&
+                      " bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80"
                     }`}>
                     <p className={`text-[13px]`}>{msg.sender}</p>
                   </div>
@@ -428,76 +425,8 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             )}
           </div>
         ))}
-        {/* {display.length !== 0 && (
-          <div className='flex items-end gap-3 justify-end p-4'>
-            <div>
-              <div className={`${display.length > 1 && "grid grid-cols-2"}`}>
-                {display.map((item, index) => {
-                  return (
-                    <div key={index}>
-                      <div>
-                        <div>
-                          <Image
-                            className='w-32 lg:w-40 rounded'
-                            width={200}
-                            height={200}
-                            alt=''
-                            src={URL.createObjectURL(item)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div>
-                {attachment.length !== 0 && (
-                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                    <p className='text-[13px]'>{attachment}</p>
-                  </div>
-                )}
-              </div>
-              <p className='text-[10px] mt-[2px] text-end pr-2'>
-                {getCurrentTime()}
-              </p>
-            </div>
-            <div className='mb-[6px]'>
-              <Image
-                src={sender_img}
-                alt=''
-                width={100}
-                height={100}
-                className='w-10 h-10 rounded-full'
-              />
-            </div>
-          </div>
-        )}
-        {input[0] !== "" && input.length !== 0 && (
-          <div>
-            {input.map((i, idx) => (
-              <div key={idx} className='flex items-end gap-3 justify-end p-4'>
-                <div>
-                  <div className='lg:max-w-80 max-w-52 bg-[#F4F4F5] p-3 rounded'>
-                    <p className='text-[13px]'>{i}</p>
-                  </div>
-                  <p className='text-[10px] mt-[2px] text-end pr-2'>
-                    {getCurrentTime()}
-                  </p>
-                </div>
-                <div className='mb-[6px]'>
-                  <Image
-                    src={sender_img}
-                    alt=''
-                    width={100}
-                    height={100}
-                    className='w-10 h-10 rounded-full'
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        )} */}
       </div>
+
       {/* Bottom Part */}
       <div className='lg:pl-[125px]'>
         {file.length !== 0 && (
