@@ -238,7 +238,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [modalImage, setModalImage] = useState(null);
   const [buttonAnimation, setButtonAnimation] = useState("");
-  console.log(message);
+  const [pdfUrl, setPdfUrl] = useState(null);
 
   useEffect(() => {
     setMessage(conversation.find((c) => c.id === activeId).message);
@@ -386,6 +386,14 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     URL.revokeObjectURL(url);
   }
 
+  const previewPdf = (arrayBuffer) => {
+    setModalImage(null);
+    const blob = new Blob([arrayBuffer], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    setPdfUrl(url);
+    setIsOpen(true);
+  };
+
   return (
     <div className='flex flex-col justify-between h-full'>
       {/* Top Part */}
@@ -478,6 +486,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                                 />
                                 <div
                                   onClick={() => {
+                                    setPdfUrl(null);
                                     openModal();
                                     setModalImage(item.data);
                                   }}
@@ -493,10 +502,12 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                             />
                           )}
                           {item.type === "application/pdf" && (
-                            <div className='flex items-center gap-3 bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80'>
-                              <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
+                            <div
+                              onClick={() => previewPdf(item.data)}
+                              className='flex cursor-pointer items-center gap-3 bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80'>
+                              <div className='flex items-center gap-2 text-sm font-medium text-slate-600'>
                                 <BsFileEarmarkPdf />
-                                <p>{item.name}</p>
+                                <p className='text-[13px]'>{item.name}</p>
                               </div>
                               <button
                                 onClick={(e) => {
@@ -691,36 +702,44 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel='Example Modal'>
-        <div className='relative'>
-          <div className=' absolute lg:right-5 right-2 lg:top-5 top-2 space-x-3'>
-            <button
-              className={`${buttonAnimation} ${styles.button_shadow} text-xl lg:text-2xl bg-slate-50 text-slate-800 shadow-2xl border border-orange-500 p-[3px] rounded-full`}>
-              <a
-                href={modalImage}
-                download='image.jpg'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleButtonClick(() => {});
-                }}>
-                <MdOutlineFileDownload />
-              </a>
-            </button>
-            <button
-              onClick={() => closeModal()}
-              className={`${styles.button_shadow} focus:animate-ping duration-500 text-xl lg:text-2xl shadow-2xl border bg-slate-50 border-orange-500 p-1 rounded-full text-slate-800`}>
-              <RxCrossCircled />
-            </button>
+        {modalImage && (
+          <div className='relative'>
+            <div className=' absolute lg:right-5 right-2 lg:top-5 top-2 space-x-3'>
+              <button
+                className={`${buttonAnimation} ${styles.button_shadow} text-xl lg:text-2xl bg-slate-50 text-slate-800 shadow-2xl border border-orange-500 p-[3px] rounded-full`}>
+                <a
+                  href={modalImage}
+                  download='image.jpg'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleButtonClick(() => {});
+                  }}>
+                  <MdOutlineFileDownload />
+                </a>
+              </button>
+              <button
+                onClick={() => closeModal()}
+                className={`${styles.button_shadow} focus:animate-ping duration-500 text-xl lg:text-2xl shadow-2xl border bg-slate-50 border-orange-500 p-1 rounded-full text-slate-800`}>
+                <RxCrossCircled />
+              </button>
+            </div>
+            <div>
+              <Image
+                className='lg:h-[75vh] lg:w-auto w-full'
+                width={200}
+                height={200}
+                alt=''
+                src={modalImage}
+              />
+            </div>
           </div>
-          <div>
-            <Image
-              className='lg:h-[75vh] lg:w-auto w-full'
-              width={200}
-              height={200}
-              alt=''
-              src={modalImage}
-            />
-          </div>
-        </div>
+        )}
+        {pdfUrl && (
+          <iframe
+            src={pdfUrl}
+            className='lg:h-[600px] lg:w-[600px] h-[500px] w-full'
+            style={{ border: "none" }}></iframe>
+        )}
       </Modal>
     </div>
   );
