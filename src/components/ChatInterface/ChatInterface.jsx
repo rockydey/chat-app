@@ -19,6 +19,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import Modal from "react-modal";
 import styles from "./ChatInterface.module.css";
 import { BsFileEarmarkPdf } from "react-icons/bs";
+import PdfPreview from "../PdfPreview/PdfPreview";
 
 function getCurrentTime() {
   const now = new Date();
@@ -364,6 +365,9 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
 
   function closeModal() {
     setIsOpen(false);
+    if (pdfUrl) {
+      URL.revokeObjectURL(pdfUrl);
+    }
   }
 
   const handleButtonClick = (callback) => {
@@ -734,12 +738,13 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             </div>
           </div>
         )}
-        {pdfUrl && (
+        {/* {pdfUrl && (
           <iframe
             src={pdfUrl}
             className='lg:h-[600px] lg:w-[600px] h-[500px] w-full'
             style={{ border: "none" }}></iframe>
-        )}
+        )} */}
+        {pdfUrl && <PdfPreview fileUrl={pdfUrl} />}
       </Modal>
     </div>
   );
