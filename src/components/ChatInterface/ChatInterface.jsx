@@ -7,11 +7,28 @@ import { CiVideoOn } from "react-icons/ci";
 import { AiOutlineAudio, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
 import { FaRegFileCode } from "react-icons/fa";
-import { MdAttachFile } from "react-icons/md";
+import { MdAttachFile, MdOutlineFileDownload } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { RxCrossCircled } from "react-icons/rx";
-import { FaArrowLeft, FaPlus } from "react-icons/fa6";
+import { FaArrowLeft } from "react-icons/fa6";
+import Modal from "react-modal";
+
+const customStyles = {
+  overlay: {
+    backgroundColor: "#000000cc",
+  },
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    // marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0px",
+    border: "0px",
+  },
+};
 
 function getCurrentTime() {
   const now = new Date();
@@ -228,6 +245,8 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const [display, setDisplay] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   useEffect(() => {
     setMessage(conversation.find((c) => c.id === activeId).message);
@@ -249,10 +268,8 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -298,7 +315,19 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     setOpenTooltip(false);
     const newFiles = Array.from(e.target.files);
     if (newFiles.length <= 5) {
-      setFile((prevFiles) => [...prevFiles, ...newFiles]);
+      const newImages = newFiles.map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            resolve(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(newImages).then((newImagesData) => {
+        setFile((prevImages) => [...prevImages, ...newImagesData]);
+      });
     } else {
       alert("Maximum 5 file only");
     }
@@ -307,6 +336,14 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   function deleteFile(e) {
     const s = file.filter((item, index) => index !== e);
     setFile(s);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   return (
@@ -390,10 +427,13 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                                 width={200}
                                 height={200}
                                 alt=''
-                                src={URL.createObjectURL(item)}
+                                src={item}
                               />
                               <div
-                                onClick={() => console.log("hello")}
+                                onClick={() => {
+                                  openModal();
+                                  setModalImage(item);
+                                }}
                                 class='absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition duration-300 ease-in-out cursor-pointer'></div>
                             </div>
                           </div>
@@ -449,7 +489,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                       width={200}
                       height={200}
                       alt=''
-                      src={URL.createObjectURL(item)}
+                      src={item}
                     />
                     <button
                       onClick={() => deleteFile(index)}
@@ -537,6 +577,40 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
           </div>
         </form>
       </div>
+
+      {/* View Image */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel='Example Modal'>
+        <div className='relative'>
+          <div className=' absolute lg:right-5 right-2 lg:top-5 top-2 space-x-3'>
+            <button className='text-xl lg:text-2xl bg-slate-200 p-[3px] rounded-full text-slate-800'>
+              <a
+                href={modalImage}
+                download='image.jpg'
+                onClick={(e) => e.stopPropagation()}>
+                <MdOutlineFileDownload />
+              </a>
+            </button>
+            <button
+              onClick={closeModal}
+              className='text-xl lg:text-2xl bg-slate-200 p-1 rounded-full text-slate-800'>
+              <RxCrossCircled />
+            </button>
+          </div>
+          <div>
+            <Image
+              className='lg:h-[75vh] lg:w-auto'
+              width={200}
+              height={200}
+              alt=''
+              src={modalImage}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
