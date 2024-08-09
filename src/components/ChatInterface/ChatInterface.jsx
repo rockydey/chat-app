@@ -13,22 +13,7 @@ import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { RxCrossCircled } from "react-icons/rx";
 import { FaArrowLeft } from "react-icons/fa6";
 import Modal from "react-modal";
-
-const customStyles = {
-  overlay: {
-    backgroundColor: "#000000cc",
-  },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    // marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    padding: "0px",
-    border: "0px",
-  },
-};
+import styles from "./ChatInterface.module.css";
 
 function getCurrentTime() {
   const now = new Date();
@@ -247,6 +232,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   const [openTooltip, setOpenTooltip] = useState(false);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [modalImage, setModalImage] = useState(null);
+  const [buttonAnimation, setButtonAnimation] = useState("");
 
   useEffect(() => {
     setMessage(conversation.find((c) => c.id === activeId).message);
@@ -272,6 +258,23 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const customStyles = {
+    overlay: {
+      backgroundColor: "#000000cc",
+    },
+    content: {
+      width: isMobile && "85%",
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      // marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      padding: "0px",
+      border: "0px",
+    },
+  };
 
   const handleText = (e) => {
     e.preventDefault();
@@ -345,6 +348,14 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
   function closeModal() {
     setIsOpen(false);
   }
+
+  const handleButtonClick = (callback) => {
+    setButtonAnimation(styles.bounce);
+    setTimeout(() => {
+      setButtonAnimation("");
+      callback();
+    }, 500);
+  };
 
   return (
     <div className='flex flex-col justify-between h-full'>
@@ -586,23 +597,27 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         contentLabel='Example Modal'>
         <div className='relative'>
           <div className=' absolute lg:right-5 right-2 lg:top-5 top-2 space-x-3'>
-            <button className='text-xl lg:text-2xl bg-slate-200 p-[3px] rounded-full text-slate-800'>
+            <button
+              className={`${buttonAnimation} ${styles.button_shadow} text-xl lg:text-2xl bg-slate-50 text-slate-800 shadow-2xl border border-orange-500 p-[3px] rounded-full`}>
               <a
                 href={modalImage}
                 download='image.jpg'
-                onClick={(e) => e.stopPropagation()}>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleButtonClick(() => {});
+                }}>
                 <MdOutlineFileDownload />
               </a>
             </button>
             <button
-              onClick={closeModal}
-              className='text-xl lg:text-2xl bg-slate-200 p-1 rounded-full text-slate-800'>
+              onClick={() => closeModal()}
+              className={`${styles.button_shadow} focus:animate-ping duration-500 text-xl lg:text-2xl shadow-2xl border bg-slate-50 border-orange-500 p-1 rounded-full text-slate-800`}>
               <RxCrossCircled />
             </button>
           </div>
           <div>
             <Image
-              className='lg:h-[75vh] lg:w-auto'
+              className='lg:h-[75vh] lg:w-auto w-full'
               width={200}
               height={200}
               alt=''
