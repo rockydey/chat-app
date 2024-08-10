@@ -272,7 +272,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       backgroundColor: "#000000cc",
     },
     content: {
-      width: isMobile ? "65%" : "50%",
+      width: isMobile ? "65%" : pdfUrl && "50%",
       backgroundColor: "#00000000",
       top: "50%",
       left: "50%",
@@ -741,7 +741,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             </div>
             <div>
               <Image
-                className='lg:h-[75vh] lg:w-auto w-full'
+                className='lg:h-[75vh]  w-full'
                 width={200}
                 height={200}
                 alt=''
