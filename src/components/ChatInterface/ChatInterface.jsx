@@ -566,14 +566,14 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             className={`${
               isMobile &&
               file.length > 1 &&
-              "overflow-x-hidden overflow-y-scroll h-12"
-            }  bg-slate-200 px-2 pt-2 rounded-sm w-full`}>
-            <div className='flex flex-wrap gap-3'>
+              "overflow-x-hidden overflow-y-scroll h-14"
+            }  bg-slate-200 px-2 rounded-sm w-full`}>
+            <div className='flex flex-wrap gap-3 h-14 items-center'>
               {file.map((item, index) => {
                 return (
                   <div key={index}>
                     {item.type.startsWith("image/") && (
-                      <div className='relative w-fit h-[46px]'>
+                      <div className='relative w-fit'>
                         <Image
                           className='h-10 w-auto rounded'
                           width={200}
@@ -590,7 +590,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                       </div>
                     )}
                     {item.type.startsWith("video/") && (
-                      <div className='relative w-fit h-[46px]'>
+                      <div className='relative w-fit'>
                         <video
                           src={item.data}
                           controls
@@ -609,7 +609,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                       </div>
                     )}
                     {item.type === "application/pdf" && (
-                      <div className='flex items-center gap-2 p-1 border border-red-500'>
+                      <div className='flex items-center gap-2 p-1 border border-red-500 rounded-[3px]'>
                         <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
                           <BsFileEarmarkPdf className='text-red-500' />
                           <p className='text-sm'>
