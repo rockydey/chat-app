@@ -560,7 +560,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       </div>
 
       {/* Bottom Part */}
-      <div className='lg:pl-[125px] lg:pr-16 pl-16 pr-5'>
+      <div className='lg:pl-[125px] lg:pr-16'>
         {file.length !== 0 && (
           <div
             className={`${
@@ -612,7 +612,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                       <div className='flex items-center gap-2 p-1'>
                         <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
                           <BsFileEarmarkPdf className='text-red-500' />
-                          <p className="text-sm">
+                          <p className='text-sm'>
                             {item.name.length > 15
                               ? item.name.slice(0, 15)
                               : item.name}
