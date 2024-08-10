@@ -751,7 +751,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         {pdfUrl && (
           <iframe
             src={pdfUrl}
-            className='lg:h-[600px] lg:w-[600px]] h-[500px] w-full'
+            className='lg:h-[600px] lg:w-[600px] h-[500px] w-full'
             style={{ border: "none" }}></iframe>
         )}
         {/* {pdfUrl && <PdfPreview fileUrl={pdfUrl} />} */}
