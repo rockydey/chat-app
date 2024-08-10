@@ -20,6 +20,7 @@ import Modal from "react-modal";
 import styles from "./ChatInterface.module.css";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import PdfPreview from "../PdfPreview/PdfPreview";
+import { ImCross } from "react-icons/im";
 
 function getCurrentTime() {
   const now = new Date();
@@ -271,7 +272,8 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       backgroundColor: "#000000cc",
     },
     content: {
-      width: isMobile && "65%",
+      width: isMobile ? "65%" : "50%",
+      backgroundColor: "#00000000",
       top: "50%",
       left: "50%",
       right: "auto",
@@ -749,10 +751,23 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
           </div>
         )}
         {pdfUrl && (
-          <iframe
-            src={pdfUrl}
-            className='lg:h-[600px] lg:w-[600px] h-[500px] w-full'
-            style={{ border: "none" }}></iframe>
+          <div className=''>
+            <div className='relative'>
+              <div className=''>
+                <iframe
+                  src={pdfUrl}
+                  className='lg:h-[600px] lg:w-[95%] h-[500px] w-full'
+                  style={{ border: "none" }}></iframe>
+              </div>
+              <div className='absolute top-[18px] right-2'>
+                <button
+                  onClick={() => closeModal()}
+                  className={`${styles.button_shadow} focus:animate-ping duration-500 text-sm text-[#F4F4F5] `}>
+                  <ImCross />
+                </button>
+              </div>
+            </div>
+          </div>
         )}
         {/* {pdfUrl && <PdfPreview fileUrl={pdfUrl} />} */}
       </Modal>
