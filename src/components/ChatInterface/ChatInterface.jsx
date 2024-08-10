@@ -508,9 +508,9 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                           {item.type === "application/pdf" && (
                             <div
                               onClick={() => previewPdf(item.data)}
-                              className='flex border-2 border-red-500 cursor-pointer items-center gap-3 bg-red-50 p-3 rounded max-w-60 lg:max-w-80'>
-                              <div className='flex items-center gap-2 text-sm font-medium text-slate-600'>
-                                <BsFileEarmarkPdf className="text-red-500" />
+                              className='flex border-2 border-red-500 cursor-pointer items-center gap-3 bg-[#F4F4F5] p-3 rounded max-w-60 lg:max-w-80'>
+                              <div className='flex items-center gap-2 text-lg font-medium text-slate-600'>
+                                <BsFileEarmarkPdf className='text-red-500' />
                                 <p>
                                   {item.name.length > 20
                                     ? item.name.slice(0, 20)
@@ -611,7 +611,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                     {item.type === "application/pdf" && (
                       <div className='flex items-center gap-2 p-1'>
                         <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
-                          <BsFileEarmarkPdf className="text-red-500" />
+                          <BsFileEarmarkPdf className='text-red-500' />
                           <p>
                             {item.name.length > 15
                               ? item.name.slice(0, 15)
