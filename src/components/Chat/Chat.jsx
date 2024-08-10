@@ -8,6 +8,9 @@ import { useFetchChatsQuery } from "@/redux/features/api/apiSlice";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import Image from "next/image";
 import { RxDragHandleDots2 } from "react-icons/rx";
+import { RiCoupon2Line } from "react-icons/ri";
+import { MdChatBubbleOutline } from "react-icons/md";
+import { IoHomeOutline } from "react-icons/io5";
 
 const Chat = () => {
   const { data: chats, isLoading } = useFetchChatsQuery("chats.json");
@@ -41,6 +44,7 @@ const Chat = () => {
 
   return (
     <div>
+      {/* header */}
       <div className='flex justify-between items-center mb-5'>
         <h1 className='text-3xl font-bold text-[#926FF5]'>Chat App</h1>
         <Link
@@ -49,74 +53,104 @@ const Chat = () => {
           <FaGithub />
         </Link>
       </div>
+
+      {/* main body */}
       <div className='flex border border-[#c7c7cea5] rounded-lg h-[500px] lg:h-[600px]'>
+        {/* chat body */}
         <div
-          className={`${showChat ? "hidden" : "inline-block"} transform  ${
-            !isOpen ? "lg:min-w-80 translate-x-0" : "translate-x-0"
-          } transition-transform duration-300 ease-in-out p-4 flex-1 w-full lg:max-w-20 lg:border-r lg:border-[#c7c7cea5]`}>
+          className={`${showChat ? "hidden" : "inline-block"}  ${
+            !isOpen ? "lg:min-w-80" : ""
+          } w-full flex-1 lg:max-w-20 lg:border-r lg:border-[#c7c7cea5] flex`}>
           <div
             className={`${
-              isOpen ? "hidden" : ""
-            } flex justify-between items-center mb-5`}>
-            <div>
-              <h4 className='text-2xl font-medium'>
-                Chats <span className='text-[#D7D4D8]'>({chats.length})</span>
-              </h4>
+              isOpen
+                ? "hidden"
+                : "w-[15%] bg-[#1D2939] h-full pt-4 rounded-l text-lg text-white flex flex-col items-center"
+            }`}>
+            <div className='py-4 px-2 border-b border-[#c7c7cea5]'>
+              <button>
+                <IoHomeOutline />
+              </button>
             </div>
-            <div className='flex items-center gap-4'>
-              <Link href='#'>
-                <HiOutlineDotsHorizontal className='text-xl' />
-              </Link>
-              <Link href='#'>
-                <FaRegEdit className='text-xl' />
-              </Link>
+            <div className='py-4 px-1 border-b border-[#c7c7cea5]'>
+              <button className='bg-blue-600 p-1 rounded'>
+                <MdChatBubbleOutline className='' />
+              </button>
+            </div>
+            <div className='py-4 px-2 border-b border-[#c7c7cea5]'>
+              <button>
+                <RiCoupon2Line />
+              </button>
             </div>
           </div>
-          <div className=''>
-            {chats.map((chat) => (
-              <div
-                onClick={() => {
-                  setActiveId(chat.id);
-                  forMobile && setShowChat(true);
-                }}
-                key={chat.id}
-                className={` ${
-                  isOpen
-                    ? "lg:bg-[#fff] lg:hover:bg-[#fff] duration-500"
-                    : "flex items-center gap-6 lg:px-5 rounded-md duration-500"
-                } ${
-                  chat.id === activeId
-                    ? "lg:bg-[#f9f9fa]"
-                    : "lg:hover:bg-[#f1f1f3]"
-                } py-4 cursor-pointer border-b border-[#c7c7ce] lg:border-none`}>
-                <div>
-                  <Image
-                    src={chat.receiver_img}
-                    alt={chat.receiver_name}
-                    width={100}
-                    height={100}
-                    className='w-10 h-10'
-                  />
-                </div>
-                <div className={`${isOpen && "hidden"} flex-1`}>
-                  <h4 className='text-sm font-medium'>{chat.receiver_name}</h4>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-xs text-[#c7c7ceb7]'>
-                      {chat.message[chat.message.length - 1].receiver.slice(
-                        0,
-                        17
-                      )}
-                      ...
-                    </p>
-                    <p className='text-xs text-[#c7c7ceb7]'>
-                      {chat.message[chat.message.length - 1].receiver_time}
-                    </p>
+          <div className={`${isOpen ? "w-full" : "w-[85%]"} pt-4 px-4 lg:px-0`}>
+            <div
+              className={`${
+                isOpen ? "hidden" : ""
+              } flex justify-between items-center mb-5 px-4`}>
+              <div>
+                <h4 className='text-2xl font-medium'>
+                  Chats <span className='text-[#D7D4D8]'>({chats.length})</span>
+                </h4>
+              </div>
+              <div className='flex items-center gap-4'>
+                <Link href='#'>
+                  <HiOutlineDotsHorizontal className='text-xl' />
+                </Link>
+                <Link href='#'>
+                  <FaRegEdit className='text-xl' />
+                </Link>
+              </div>
+            </div>
+            <div className=''>
+              {chats.map((chat) => (
+                <div
+                  onClick={() => {
+                    setActiveId(chat.id);
+                    forMobile && setShowChat(true);
+                  }}
+                  key={chat.id}
+                  className={` ${
+                    isOpen
+                      ? "lg:bg-[#fff] lg:hover:bg-[#fff] duration-500"
+                      : "flex items-center gap-4 lg:px-5 rounded-md duration-500"
+                  } ${
+                    chat.id === activeId
+                      ? "lg:bg-[#f9f9fa]"
+                      : "lg:hover:bg-[#f1f1f3]"
+                  } py-4 cursor-pointer border-b border-[#c7c7ce] lg:border-none`}>
+                  <div className='text-center'>
+                    <Image
+                      src={chat.receiver_img}
+                      alt={chat.receiver_name}
+                      width={100}
+                      height={100}
+                      className='w-10 h-10 inline-block'
+                    />
+                  </div>
+                  <div className={`${isOpen && "hidden"} flex-1`}>
+                    <h4 className='text-sm font-medium'>
+                      {chat.receiver_name}
+                    </h4>
+                    <div className='flex justify-between items-center'>
+                      <p className='text-xs text-[#c7c7ceb7]'>
+                        {chat.message[chat.message.length - 1].receiver.slice(
+                          0,
+                          17
+                        )}
+                        ...
+                      </p>
+                      <p className='text-xs text-[#c7c7ceb7]'>
+                        {chat.message[chat.message.length - 1].receiver_time}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
+
         <div className='w-[1px] hidden lg:block border-r border-[#c7c7cea5] relative'>
           <div
             onClick={toggleDrawer}
@@ -124,6 +158,8 @@ const Chat = () => {
             <RxDragHandleDots2 className='text-xs' />
           </div>
         </div>
+
+        {/* chat interface */}
         <div
           className={`${
             showChat ? "inline-block w-full" : "hidden"
@@ -137,6 +173,8 @@ const Chat = () => {
           />
         </div>
       </div>
+
+      {/* Footer */}
       <div className='text-sm font-normal text-[#71717A] flex flex-col lg:flex-row gap-2 justify-between items-center mt-5'>
         <p>
           Build by <span className='font-semibold'>Rocky Dey</span>.
