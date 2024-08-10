@@ -568,7 +568,11 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
             className={`${
               isMobile &&
               file.length > 1 &&
-              "overflow-x-hidden overflow-y-scroll h-14"
+              "overflow-x-hidden overflow-y-scroll h-14 pt-2"
+            } ${
+              !isMobile &&
+              file.length > 2 &&
+              "overflow-x-hidden overflow-y-scroll h-14 pt-2"
             }  bg-slate-200 px-2 rounded-sm w-full`}>
             <div className='flex flex-wrap gap-3 h-14 items-center'>
               {file.map((item, index) => {
