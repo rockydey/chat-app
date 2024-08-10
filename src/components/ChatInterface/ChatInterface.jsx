@@ -396,8 +396,12 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
     setModalImage(null);
     const blob = new Blob([arrayBuffer], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
-    setPdfUrl(url);
-    setIsOpen(true);
+    if (isMobile) {
+      window.open(url);
+    } else {
+      setPdfUrl(url);
+      setIsOpen(true);
+    }
   };
 
   return (
@@ -765,6 +769,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                   className='lg:h-[600px] lg:w-[95%] h-[500px] w-full'
                   style={{ border: "none" }}></iframe>
               </div>
+
               <div className='absolute top-[18px] right-2'>
                 <button
                   onClick={() => closeModal()}
