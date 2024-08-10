@@ -271,7 +271,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
       backgroundColor: "#000000cc",
     },
     content: {
-      width: isMobile && "85%",
+      width: isMobile && "65%",
       top: "50%",
       left: "50%",
       right: "auto",
@@ -567,7 +567,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
               isMobile &&
               file.length > 1 &&
               "overflow-x-hidden overflow-y-scroll h-12"
-            }  bg-slate-200 px-2 pt-2 rounded-sm w-fit`}>
+            }  bg-slate-200 px-2 pt-2 rounded-sm w-full`}>
             <div className='flex flex-wrap gap-3'>
               {file.map((item, index) => {
                 return (
@@ -609,7 +609,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
                       </div>
                     )}
                     {item.type === "application/pdf" && (
-                      <div className='flex items-center gap-2 p-1'>
+                      <div className='flex items-center gap-2 p-1 border border-red-500'>
                         <div className='flex items-center gap-2 text-base font-medium text-slate-600'>
                           <BsFileEarmarkPdf className='text-red-500' />
                           <p className='text-sm'>
@@ -751,7 +751,7 @@ const ChatInterface = ({ setShowChat, forMobile, activeId }) => {
         {pdfUrl && (
           <iframe
             src={pdfUrl}
-            className='lg:h-[600px] lg:w-[600px] h-[500px] w-full'
+            className='lg:h-[600px] lg:w-[600px]] h-[500px] w-full'
             style={{ border: "none" }}></iframe>
         )}
         {/* {pdfUrl && <PdfPreview fileUrl={pdfUrl} />} */}
